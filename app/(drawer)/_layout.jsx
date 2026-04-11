@@ -19,7 +19,7 @@ const CustomDrawerContent = (props) => {
             </View>
             <DrawerItem
                 label={"首頁"}
-                labelStyle={{ fontSize: 20, padding: 10, color: pathname == '/' ? "#fff" : "#f3acc1" }}
+                labelStyle={{ fontSize: 20, padding: 5, color: pathname == '/' ? "#fff" : "#f3acc1" }}
                 icon={({ size }) => (
                     <Ionicons name="home-outline" size={size} color={pathname == "/" ? "#fff" : "#f3acc1"} />
                 )}
@@ -30,7 +30,7 @@ const CustomDrawerContent = (props) => {
             />
             <DrawerItem
                 label={"日曆"}
-                labelStyle={{ fontSize: 20, padding: 10, color: pathname == '/calendar' ? "#fff" : "#f3acc1" }}
+                labelStyle={{ fontSize: 20, padding: 5, color: pathname == '/calendar' ? "#fff" : "#f3acc1" }}
                 icon={({ size }) => (
                     <Ionicons name="calendar-outline" size={size} color={pathname == "/calendar" ? "#fff" : "#f3acc1"} />
                 )}
@@ -41,7 +41,7 @@ const CustomDrawerContent = (props) => {
             />
             <DrawerItem
                 label={"分類"}
-                labelStyle={{ fontSize: 20, padding: 10, color: pathname == '/class' ? "#fff" : "#f3acc1" }}
+                labelStyle={{ fontSize: 20, padding: 5, color: pathname == '/class' ? "#fff" : "#f3acc1" }}
                 icon={({ size }) => (
                     <Ionicons name="folder-outline" size={size} color={pathname == "/class" ? "#fff" : "#f3acc1"} />
                 )}
@@ -52,7 +52,7 @@ const CustomDrawerContent = (props) => {
             />
             <DrawerItem
                 label={"設定"}
-                labelStyle={{ fontSize: 20, padding: 10, color: pathname == '/setting' ? "#fff" : "#f3acc1" }}
+                labelStyle={{ fontSize: 20, padding: 5, color: pathname == '/setting' ? "#fff" : "#f3acc1" }}
                 icon={({ size }) => (
                     <Ionicons name="settings-outline" size={size} color={pathname == "/setting" ? "#fff" : "#f3acc1"} />
                 )}
@@ -89,8 +89,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
-        marginTop: 10,
-        marginBottom: 10,
+        marginVertical:0,
         fontWeight: "bold",
         color: "#f3acc1",
     },

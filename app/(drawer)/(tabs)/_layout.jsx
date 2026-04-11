@@ -12,7 +12,7 @@ export default function Layout() {
                 color:"#f3acc1",
                 fontSize:24,
             },
-            tabBarStyle: { height: 100, paddingTop: 10 },
+            tabBarStyle: { height: 120, paddingTop: 10 },
             tabBarLabelStyle: { marginTop: 6, fontSize: 12},
             tabBarActiveTintColor: 'white',
             tabBarInactiveTintColor: '#f3acc1',

@@ -61,9 +61,6 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         alignItems: "flex-start", 
         justifyContent: "center",
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-        elevation: 4,
 
     },
     tcard: {
@@ -101,7 +98,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
     },
     title: {
-        fontSize: 28,
+        fontSize: 20,
         fontWeight: "bold",
         color: "#fff",
         bottom: 8,

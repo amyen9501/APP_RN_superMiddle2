@@ -8,7 +8,7 @@ import useTaskStore from "../../../store/useTaskStore";
 
 
 export default function Index() {
-  const { tasks, filterStatus, setFilterStatus, toggleTaskStatus,setModalVisible } = useTaskStore();
+  const { tasks, filterStatus, setFilterStatus, toggleTaskStatus, setModalVisible } = useTaskStore();
   const [editTaskData, setEditTaskData] = useState(null);
   const filterTask = tasks.filter(task => {
     if (filterStatus === '全部') return true;
@@ -62,7 +62,8 @@ export default function Index() {
         {filterTask.map((item) => (
           <View key={item.id} style={styles.taskCard}>
             <TouchableOpacity
-              onPress={() => toggleTaskStatus(item.id)}>
+              onPress={() => toggleTaskStatus(item.id)}
+              style={styles.taskcheck}>
               <Ionicons
                 name={item.status === '已完成' ? "checkmark-circle" : "ellipse-outline"}
                 size={28}
@@ -72,18 +73,18 @@ export default function Index() {
             <View style={styles.taskText}>
               <Text style={[styles.taskTitle, item.status === '已完成' && styles.finishTask]}>{item.title}</Text>
               {item.content ? <Text style={styles.taskContent}>{item.content}</Text> : null}
-              <View style={{flexDirection:'row',alignItems:'center'}}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={styles.taskDetailTag}>#{item.category}</Text>
                 <Text style={styles.taskDetailDate}> 截止日期：{item.date} </Text>
               </View>
 
             </View>
-            <TouchableOpacity 
-            style={styles.editbutton}
-            onPress={() => {
-              setEditTaskData(item);
-              setModalVisible(true);
-            }}>
+            <TouchableOpacity
+              style={styles.editbutton}
+              onPress={() => {
+                setEditTaskData(item);
+                setModalVisible(true);
+              }}>
               <Ionicons name="create-outline" size={24} color="#f3acc1" style={{ marginRight: 10 }} />
             </TouchableOpacity>
           </View>
@@ -92,7 +93,7 @@ export default function Index() {
       <AddTaskModal
         editTaskData={editTaskData}
         setEditTaskData={setEditTaskData} />
-      <Button setEditTaskData={setEditTaskData}/>
+      <Button setEditTaskData={setEditTaskData} />
     </View>
   );
 }
@@ -109,13 +110,13 @@ const styles = StyleSheet.create({
   missionBox: {
     backgroundColor: "#ffffff00",
     width: '100%',
-    height: 200,
+    height: 160,
     borderRadius: 10,
     marginBottom: 20,
     overflow: 'hidden',
   },
   missionText: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#fff",
     textAlign: "center",
@@ -125,20 +126,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 15,
-    marginTop: 20,
+    marginTop: 15,
   },
   missionStateBox: {
     width: "28%",
-    height: "90%",
+    height: 80,
     backgroundColor: "#ffffff58",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,
   },
-  missionStateNum:{
-    color:'white',
-    fontWeight:'bold',
-    fontSize:30,
+  missionStateNum: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
   },
   missionStateBoxText: {
     color: "#fff",
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
   },
   tabButton: {
     paddingVertical: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     borderRadius: 10,
     marginBottom: 10,
     backgroundColor: '#ffd1dc',
@@ -172,47 +173,50 @@ const styles = StyleSheet.create({
     borderColor: '#ababab',
     borderWidth: 1.5,
     borderRadius: 10,
-    padding: 20,
+    paddingVertical: 15,
+    paddingRight: 15,
+    paddingLeft: 10,
     marginVertical: 10,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent:'space-between',
+    //alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  taskText:{
+  taskText: {
     marginLeft: 10,
-    width:'80%',
+    width: '80%',
     //backgroundColor:'#c0c0c0',
   },
   taskTitle: {
     fontSize: 20,
     fontWeight: 'bold',
   },
-  taskContent:{
-    marginVertical:5,
+  taskContent: {
+    marginVertical: 5,
     color: '#666',
     fontSize: 16,
   },
   taskDetailTag: {
-    color:'#2c2a39',
-    backgroundColor:'#ffe1e8',
-    paddingVertical:4,
-    paddingHorizontal:8,
-    borderRadius:20,
+    color: '#2c2a39',
+    backgroundColor: '#ffe1e8',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 20,
     marginTop: 5,
-    fontWeight:'bold',
+    //fontSize:14,
+    fontWeight: 'bold',
   },
   taskDetailDate: {
-    marginLeft:5,
-    color:'#2c2a39',
-    backgroundColor:'#d6cffc',
-    paddingVertical:4,
-    paddingHorizontal:8,
-    borderRadius:20,
+    marginLeft: 5,
+    color: '#2c2a39',
+    backgroundColor: '#d6cffc',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 20,
     marginTop: 5,
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
-  editbutton:{
-
+  taskcheck: {
+    justifyContent: 'center'
   },
 
 });

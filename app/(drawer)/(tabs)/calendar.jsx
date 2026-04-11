@@ -98,7 +98,7 @@ const {tasks}= useTaskStore();
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff5f7' },
+  container: { flex: 1, backgroundColor: '#ffffff' },
   scrollContent: { padding: 20 },
   card: {
     backgroundColor: 'white',

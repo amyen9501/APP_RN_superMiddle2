@@ -76,10 +76,10 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
     if (!isModalVisible) return null;
 
 
-    
+
     return (
         <Modal visible={isModalVisible} animationType="slide" transparent={true}>
-          
+
             <View style={styles.Card}>
                 <View style={styles.modal}>
                     <View style={styles.top}>
@@ -97,17 +97,17 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
                     <Text style={styles.newTaskText2}>任務標題</Text>
                     <TextInput style={styles.TaskInput} placeholder="輸入任務標題..." value={title} onChangeText={setTitle} autoFocus={true} />
                     <Text style={styles.newTaskText2}>任務描述</Text>
-                    <TextInput style={styles.TaskInput} placeholder="輸入任務描述..." value={content} onChangeText={setContent} autoFocus={true}/>
-<Text style={styles.newTaskText}>截止日期</Text>
-<TouchableOpacity 
-    onPress={() => setShowDatePicker(true)} 
-    style={styles.datePickerBox}
->
-    <Ionicons name="calendar" size={20} color="#f3acc1" />
-    <Text style={styles.dateDisplay}>
-        {date.toISOString().split('T')[0]} {}
-    </Text>
-</TouchableOpacity>
+                    <TextInput style={styles.TaskInput} placeholder="輸入任務描述..." value={content} onChangeText={setContent} autoFocus={true} />
+                    <Text style={styles.newTaskText2}>截止日期</Text>
+                    <TouchableOpacity
+                        onPress={() => setShowDatePicker(true)}
+                        style={styles.datePickerBox}
+                    >
+                        <Ionicons name="calendar" size={20} color="#f3acc1" />
+                        <Text style={styles.dateDisplay}>
+                            {date.toISOString().split('T')[0]} { }
+                        </Text>
+                    </TouchableOpacity>
 
                     { }
                     {showDatePicker && (
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     },
     modal: {
         width: '85%',
-        height: '60%',
+        height: 550,
         backgroundColor: '#fff',
         borderRadius: 20,
     },
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
     },
     newTaskText: {
-        fontSize: 24,
+        fontSize: 20,
         marginLeft: 20,
         fontWeight: 'bold',
     },
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         marginHorizontal: 20,
         borderRadius: 10,
-        flex:1
+        flex: 1
     },
     addbuttonText: {
         color: '#fff',
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: 20,
         borderRadius: 10,
-        flex:1
+        flex: 1
     },
     cancelButton: {
         width: 50,
@@ -226,6 +226,7 @@ const styles = StyleSheet.create({
     },
     dropdown: {
         marginHorizontal: 30,
+        marginVertical:5,
     },
     placeholderStyle: {
         fontSize: 14,
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
     },
     buttonGroup: {
         marginTop: 20,
-        flexDirection:'row'
+        flexDirection: 'row'
     },
     datePickerButton: {
         flexDirection: 'row',
@@ -265,5 +266,4 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#333',
     },
-
 });
