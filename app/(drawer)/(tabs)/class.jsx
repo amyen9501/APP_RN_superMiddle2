@@ -1,11 +1,11 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
-import { FlatList, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, } from "react-native";
+import { FlatList, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
 import useTaskStore from "../../../store/useTaskStore";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function Class() {
-    const { categories, addCategory, tasks } = useTaskStore();
+    const { categories, addCategory, tasks, deleteCategory } = useTaskStore();
     const [newCate, setNewCate] = useState('');
     const [isAdding, setIsAdding] = useState(false);
     const saveAdd = () => {
@@ -14,7 +14,10 @@ export default function Class() {
             setNewCate('');
             setIsAdding(false);
         }
+
+
     }
+
 
     const allCount = categories.length;
 
@@ -78,21 +81,44 @@ export default function Class() {
                     const totalCount = categoryTasks.length;
                     const completedCount = categoryTasks.filter(t => t.status === '已完成').length;
                     const ongoingCount = totalCount - completedCount;
+                    const handleDelete = () => {
+                        if (totalCount > 0) {
+                            Alert.alert("該分類中還有任務正在進行。");
+                            return;
+                        }
+                        Alert.alert(
+                            "刪除分類",
+                            `確定要刪除「${item}」嗎？`,
+                            [
+                                { text: "取消", style: "cancel" },
+                                {
+                                    text: "確定",
+                                    style: "destructive",
+                                    onPress: () => deleteCategory(item)
+                                }
+                            ]
+                        );
+                    };
                     return (
                         <View style={styles.classcard}>
-                            <View style={styles.block}>
-                                <Ionicons name='folder-outline' size={20} color={'white'} />
-                            </View>
-                            <View>
-                                <Text style={styles.classview}>{item}</Text>
-                                <View style={styles.statusContainer}>
-                                    <Text style={styles.classtext}>
-                                        <Text>總任務 {totalCount} </Text>
-                                        <Text style={styles.classtag1}> 進行中 {ongoingCount} </Text>
-                                        <Text style={{ color: '#a28fffdc' }}> 已完成 {completedCount}</Text>
-                                    </Text>
+                            <View style={styles.classcardLeft}>
+                                <View style={styles.block}>
+                                    <Ionicons name='folder-outline' size={20} color={'white'} />
+                                </View>
+                                <View>
+                                    <Text style={styles.classview}>{item}</Text>
+                                    <View style={styles.statusContainer}>
+                                        <Text style={styles.classtext}>
+                                            <Text>總任務 {totalCount} </Text>
+                                            <Text style={styles.classtag1}> 進行中 {ongoingCount} </Text>
+                                            <Text style={{ color: '#a28fffdc' }}> 已完成 {completedCount}</Text>
+                                        </Text>
+                                    </View>
                                 </View>
                             </View>
+                            <TouchableOpacity onPress={handleDelete} style={styles.deleteBtn}>
+                                <Ionicons name="trash-outline" size={20} color="#ff6b6b" />
+                            </TouchableOpacity>
                         </View>
                     )
 
@@ -111,7 +137,7 @@ const styles = StyleSheet.create({
         //alignItems: 'center',
         paddingTop: StatusBar.currentHeight,
         paddingHorizontal: 20,
-        paddingTop: StatusBar.currentHeight || 30, 
+        paddingTop: StatusBar.currentHeight || 30,
     },
     button: {
         flexDirection: 'row',
@@ -146,7 +172,7 @@ const styles = StyleSheet.create({
     },
     twobutton: {
         flexDirection: 'row',
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
         width: '100%',
 
     },
@@ -222,13 +248,18 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
         width: '100%',
         height: 80,
         borderColor: '#ababab',
         borderWidth: 1.5,
         borderRadius: 10,
     },
-
+    classcardLeft:{
+        flexDirection:'row',
+        alignItems:'center',
+        marginLeft:10,
+    },
     block: {
         borderRadius: 10,
         backgroundColor: "#f3acc1",
@@ -258,6 +289,10 @@ const styles = StyleSheet.create({
 
 
 
+    },
+    deleteBtn: {
+        padding: 10,
+        marginRight:10,
     },
 })
 
