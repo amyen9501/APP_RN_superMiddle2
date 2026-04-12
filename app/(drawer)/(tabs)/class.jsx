@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     classcardLeft:{
         flexDirection:'row',
         alignItems:'center',
-        marginLeft:10,
+        marginLeft:5,
     },
     block: {
         borderRadius: 10,
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
     },
     deleteBtn: {
         padding: 10,
-        marginRight:10,
+        marginRight:5,
     },
 })
 
