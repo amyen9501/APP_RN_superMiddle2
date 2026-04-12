@@ -69,8 +69,6 @@ export default function Class() {
                 }
             </View>
 
-
-            {/*這裡是能列出現在有的分類的表單*/}
             <FlatList
                 data={categories}
                 extraData={tasks}
@@ -148,8 +146,9 @@ const styles = StyleSheet.create({
     },
     twobutton: {
         flexDirection: 'row',
-        alignItems: 'flex-start',
+        justifyContent:'space-between',
         width: '100%',
+
     },
 
     missionBox: {
