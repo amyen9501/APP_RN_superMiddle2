@@ -36,7 +36,7 @@ export default function Setting() {
                 thumbColor={isDarkMode ? "#f3acc1" : "#f4f3f4"}
                 onValueChange={setIsDarkMode}
                 value={isDarkMode}
-                top={35}
+                //top={35}
             />
     </View>
             <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "flex-start", 
-        paddingTop: StatusBar.currentHeight || 30, // 確保頂部有留白
+        paddingTop: StatusBar.currentHeight || 30,
         paddingHorizontal: 20,
     },
     Card: {
@@ -87,8 +87,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
         color: "#81777a",
-        marginLeft: 15,
-        left: 40,
+        marginLeft: 50,
         justifyContent: "center",
         bottom:20
     },
