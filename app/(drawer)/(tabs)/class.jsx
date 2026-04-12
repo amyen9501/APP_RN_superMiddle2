@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
         //alignItems: 'center',
         paddingTop: StatusBar.currentHeight,
         paddingHorizontal: 20,
+        paddingTop: StatusBar.currentHeight || 30, 
     },
     button: {
         flexDirection: 'row',

@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingTop: StatusBar.currentHeight,
     paddingHorizontal: 20,
+    paddingTop: StatusBar.currentHeight || 30,
   },
   missionBox: {
     backgroundColor: "#ffffff00",
