@@ -26,7 +26,7 @@ export default function Setting() {
             name={isDarkMode ? "moon" : "sunny"} 
             size={40}
             color={isDarkMode ? "#a28fff" : "#f3acc1"} 
-            top={15}
+            top={14}
           />
             <Text style={styles.t2}>深色模式</Text>
             
@@ -36,6 +36,7 @@ export default function Setting() {
                 thumbColor={isDarkMode ? "#f3acc1" : "#f4f3f4"}
                 onValueChange={setIsDarkMode}
                 value={isDarkMode}
+                top={35}
             />
     </View>
             <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
@@ -51,12 +52,12 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "flex-start", 
-        paddingTop: StatusBar.currentHeight || 40, // 確保頂部有留白
+        paddingTop: StatusBar.currentHeight || 30, // 確保頂部有留白
         paddingHorizontal: 20,
     },
     Card: {
         width: "100%",
-        height: 180,
+        height: 150,
         borderRadius: 15,
         overflow: 'hidden',
         alignItems: "flex-start", 
@@ -98,14 +99,15 @@ const styles = StyleSheet.create({
         fontSize: 24,
     },
     title: {
-        fontSize: 20,
+        fontSize: 28,
         fontWeight: "bold",
         color: "#fff",
-        bottom: 8,
+        bottom: 5,
 },
     tt: {
         fontSize: 16,
         fontWeight: "bold",
         color: "#fff",
+        top: 5,
     }
 });
