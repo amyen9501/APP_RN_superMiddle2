@@ -194,6 +194,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 20,
         elevation: 4,
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
         paddingHorizontal: 20,
     },
     submit: {
