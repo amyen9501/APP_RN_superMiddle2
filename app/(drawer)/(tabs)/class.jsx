@@ -45,6 +45,7 @@ export default function Class() {
                             <TextInput
                                 style={styles.addclass}
                                 placeholder="請輸入分類名稱..."
+                                 placeholderTextColor="#e9bdc7" 
                                 value={newCate}
                                 onChangeText={setNewCate}
 
@@ -141,14 +142,14 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 20,
         elevation: 4,
-        marginRight: "40",
+       
         paddingHorizontal: 20,
     },
     twobutton: {
         flexDirection: 'row',
-        justifyContent:'space-between',
+        alignItems: 'center',
         width: '100%',
-
+        justifyContent: 'space-between',
     },
 
     missionBox: {
@@ -197,6 +198,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 10,
         paddingHorizontal: 20,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
     },
     submit: {
         fontSize: 20,
