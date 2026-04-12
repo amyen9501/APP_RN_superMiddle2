@@ -84,7 +84,7 @@ export default function Class() {
                     const ongoingCount = totalCount - completedCount;
                     const handleDelete = () => {
                         if (totalCount > 0) {
-                            Alert.alert("該分類中還有任務正在進行。");
+                            Alert.alert("無法刪除","該分類中還有任務正在進行。");
                             return;
                         }
                         Alert.alert(
