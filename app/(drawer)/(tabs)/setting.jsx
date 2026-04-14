@@ -21,12 +21,12 @@ export default function Setting() {
                 </LinearGradient>
             </View>
     <View style={styles.tcard}>
-        <View tyle={styles.tinfo}> 
+        <View style={styles.tinfo}> 
               <Ionicons 
             name={isDarkMode ? "moon" : "sunny"} 
             size={40}
             color={isDarkMode ? "#a28fff" : "#f3acc1"} 
-            top={14}
+            //top={14}
           />
             <Text style={styles.t2}>深色模式</Text>
             
@@ -87,9 +87,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
         color: "#81777a",
-        marginLeft: 50,
         justifyContent: "center",
-        bottom:20
     },
 
     Cardtext: {
