@@ -36,6 +36,7 @@ export default function Setting() {
                 thumbColor={isDarkMode ? "#f3acc1" : "#f4f3f4"}
                 onValueChange={setIsDarkMode}
                 value={isDarkMode}
+                style={{ alignSelf: "center" }}
                 //top={35}
             />
     </View>
@@ -82,6 +83,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: 10,
+        height: "100%",
     },
     t2: {
         fontSize: 20,
