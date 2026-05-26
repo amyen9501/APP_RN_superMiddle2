@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
-import useTaskStore from "../../../store/useTaskStore";
+import useTaskStore from "../../store/useTaskStore";
 
 
 LocaleConfig.locales['zh'] = {

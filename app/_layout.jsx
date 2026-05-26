@@ -6,7 +6,7 @@ export default function Layout() {
   return (
     <GestureHandlerRootView style={{flex:1}}>
       <Stack>
-        <Stack.Screen name='(drawer)' options={{headerShown:false}}/>
+        <Stack.Screen name='(tabs)' options={{headerShown:false}}/>
       </Stack>
     </GestureHandlerRootView>
   );

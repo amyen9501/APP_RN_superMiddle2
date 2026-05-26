@@ -1,7 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { FlatList, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
-import useTaskStore from "../../../store/useTaskStore";
+import useTaskStore from "../../store/useTaskStore";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function Class() {
