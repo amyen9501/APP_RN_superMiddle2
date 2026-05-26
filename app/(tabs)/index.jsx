@@ -2,9 +2,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import AddTaskModal from "../../../components/AddTaskModal";
-import Button from "../../../components/Button";
-import useTaskStore from "../../../store/useTaskStore";
+import AddTaskModal from "../../components/AddTaskModal";
+import Button from "../../components/Button";
+import useTaskStore from "../../store/useTaskStore";
 
 
 export default function Index() {
