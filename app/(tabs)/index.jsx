@@ -24,7 +24,7 @@ useEffect(() => {
       if (unsubscribeFromFirestore) unsubscribeFromFirestore();
 
       if (user) {
-        console.log("[首頁]目前的 UID 為:", user.uid);
+        console.log("目前的 UID 為:", user.uid);
         unsubscribeFromFirestore = listenToTasks(user.uid);
       }
     });

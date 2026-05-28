@@ -21,7 +21,7 @@ const useTaskStore = create((set, get) => ({
         );
 
         return onSnapshot(q, (querySnapshot) => {
-            console.log(`[Firebase] 同步成功，目前該 UID 雲端共有 ${querySnapshot.size} 筆任務`);
+            console.log(`同步成功，目前該 UID 雲端共有 ${querySnapshot.size} 筆任務`);
             const cloudTasks = [];
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
@@ -131,7 +131,7 @@ const useTaskStore = create((set, get) => ({
             });
 
             await Promise.all(batchPromises);
-            console.log("[Zustand] 訪客任務已成功移轉至會員帳號");
+            console.log("訪客任務已成功移轉至會員帳號");
         } catch (error) {
             console.error("移轉任務失敗:", error);
         }
