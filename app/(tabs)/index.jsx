@@ -1,22 +1,42 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AddTaskModal from "../../components/AddTaskModal";
 import Button from "../../components/Button";
 import useTaskStore from "../../store/useTaskStore";
+import { useFocusEffect } from "expo-router";
+import { auth } from "../../firebaseConfig";
 
 
 export default function Index() {
-  const { tasks, filterStatus, setFilterStatus, toggleTaskStatus, setModalVisible } = useTaskStore();
+  const { tasks, filterStatus, setFilterStatus, toggleTaskStatus, setModalVisible, listenToTasks } = useTaskStore();
   const [editTaskData, setEditTaskData] = useState(null);
   const filterTask = tasks.filter(task => {
+    const currentStatus = task.status || '進行中';
     if (filterStatus === '全部') return true;
-    return task.status === filterStatus;
-  })
+    return currentStatus === filterStatus;
+  });
+
+useEffect(() => {
+    let unsubscribeFromFirestore = () => {};
+    const unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
+      if (unsubscribeFromFirestore) unsubscribeFromFirestore();
+
+      if (user) {
+        console.log("[首頁]目前的 UID 為:", user.uid);
+        unsubscribeFromFirestore = listenToTasks(user.uid);
+      }
+    });
+
+    return () => {
+      if (unsubscribeFromAuth) unsubscribeFromAuth();
+      if (unsubscribeFromFirestore) unsubscribeFromFirestore();
+    };
+  }, [listenToTasks]);
 
   const allCount = tasks.length;
-  const activeCount = tasks.filter(task => task.status === '進行中').length;
+  const activeCount = tasks.filter(task => (task.status || '進行中') === '進行中').length;
   const finishCount = tasks.filter(task => task.status === '已完成').length;
 
   return (

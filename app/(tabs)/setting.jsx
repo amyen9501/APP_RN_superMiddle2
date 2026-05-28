@@ -6,11 +6,13 @@ import { auth } from '../../firebaseConfig';
 import { onAuthStateChanged, signOut, linkWithCredential, EmailAuthProvider, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
 import RegisterModal from '../../components/registerModal';
 import LoginModal from "../../components/loginModal";
+import useTaskStore from "../../store/useTaskStore";
 
 const DEFAULT_AVATARS = ['https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjwG0xXIptaOP2F8qwAxGh3weCF0xugPbOgOFCwEIenI0j6FBGDjdxqYN4VgUDkgVWc8n3ef_jZ-1m6BAuhEync9TJoejgyIeHycpXiB1oZJ88u99yC0C3cnap7MUNNZ5WQQwqfV9gaTHA/s170/animal_buta.png'];
 
 
 export default function Setting() {
+    const { listenToTasks,migrateGuestTasks } = useTaskStore();
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [user, setUser] = useState(null);
 
@@ -30,9 +32,18 @@ export default function Setting() {
 
 
     const handleLogin = async ({ email, password }) => {
+        const guestUid = auth.currentUser?.uid; 
+        console.log("👉 登入前訪客 UID:", guestUid);
+
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            Alert.alert("登入成功", "歡迎回來！");
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const memberUid = userCredential.user.uid;
+            console.log("👉 登入成功，會員 UID:", memberUid);
+            if (guestUid && memberUid) {
+                await useTaskStore.getState().migrateGuestTasks(guestUid, memberUid);
+            }
+
+            Alert.alert("登入成功", "歡迎回來！任務已同步完成！");
             setIsLoginVisible(false);
         } catch (error) {
             Alert.alert("登入失敗", error.message);
@@ -78,7 +89,7 @@ export default function Setting() {
                         <Image source={{ uri: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgKdSrmtSstxIzLHTBocc0-gUtYruNXO9S5bRMpWeHR6VVKgDfMK956erZQ5p93vew6n9IrFPC7HNdVNa3djeqItGhwqPbJbyBCnRMSjhFP_IfV1umTcxjTborMMCS-effWgOaUJcdwAoI/s400/futon_derenai.png' }} style={styles.avatar} />
                         <View style={styles.userInfo}>
                             <Text style={styles.nameText}>訪客模式</Text>
-                            <Text style={styles.subText}>登入或註冊以同步雲端行程</Text>
+                            <Text style={styles.subText}>登入或註冊以同步雲端任務</Text>
                         </View>
                     </View>
                     <View style={styles.btnGroup}>
