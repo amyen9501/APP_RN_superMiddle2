@@ -12,11 +12,12 @@ const DEFAULT_AVATARS = ['https://blogger.googleusercontent.com/img/b/R29vZ2xl/A
 
 
 export default function Setting() {
-    const { listenToTasks,migrateGuestTasks } = useTaskStore();
+    const { listenToTasks, migrateGuestTasks, updateCurrentProfile } = useTaskStore();
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [user, setUser] = useState(null);
 
-    const [isRegisterVisible, setIsRegisterVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
     const [isLoginVisible, setIsLoginVisible] = useState(false);
 
     useEffect(() => {
@@ -32,7 +33,7 @@ export default function Setting() {
 
 
     const handleLogin = async ({ email, password }) => {
-        const guestUid = auth.currentUser?.uid; 
+        const guestUid = auth.currentUser?.uid;
         console.log("👉 登入前訪客 UID:", guestUid);
 
         try {
@@ -50,7 +51,6 @@ export default function Setting() {
         }
     };
 
-
     const handleRegister = async ({ email, password, displayName, selectedAvatar }) => {
         try {
             const credential = EmailAuthProvider.credential(email, password);
@@ -59,14 +59,39 @@ export default function Setting() {
 
             setUser({
                 ...auth.currentUser,
-                isAnonymous: false,  
-                displayName: displayName, 
-                photoURL: selectedAvatar, 
+                isAnonymous: false,
+                displayName: displayName,
+                photoURL: selectedAvatar,
             });
             Alert.alert("恭喜", `註冊成功！`);
-            setIsRegisterVisible(false);
+
+            setModalVisible(false);
         } catch (error) {
             Alert.alert("註冊失敗", error.message);
+        }
+    };
+
+    const openEditModal = () => {
+        setIsEditMode(true);
+        setModalVisible(true);
+    };
+
+    const openRegisterModal = () => {
+        setIsEditMode(false);
+        setModalVisible(true);
+    };
+
+    const handleSaveEdit = async ({ displayName, selectedAvatar }) => {
+        const res = await updateCurrentProfile(displayName, selectedAvatar);
+        if (res.success) {
+            setUser({
+                ...auth.currentUser,
+                displayName: displayName,
+                photoURL: selectedAvatar
+            });
+            setModalVisible(false);
+        } else {
+            Alert.alert("編輯失敗", res.message);
         }
     };
 
@@ -97,7 +122,7 @@ export default function Setting() {
                             <Text style={styles.loginBtnText}>已有帳號登入</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={[styles.actionBtn, styles.registerBtn]} onPress={() => setIsRegisterVisible(true)}>
+                        <TouchableOpacity style={[styles.actionBtn, styles.registerBtn]} onPress={openRegisterModal}>
                             <Text style={styles.registerBtnText}>新用戶註冊</Text>
                         </TouchableOpacity>
                     </View>
@@ -113,9 +138,7 @@ export default function Setting() {
                         </View>
                         <TouchableOpacity
                             style={styles.editBtn}
-                            onPress={() => {
-                                Alert.alert("提示", "尚未開發")
-                            }}>
+                            onPress={openEditModal}>
                             <Ionicons name="create-outline" size={24} color="#f3acc1" style={{ marginRight: 10 }} />
                         </TouchableOpacity>
                     </View>
@@ -140,9 +163,13 @@ export default function Setting() {
             <View style={styles.footer}><Text style={{ fontSize: 16, color: "#bbb", fontWeight: "600" }}>敬請期待更多功能！</Text></View>
 
 
-
-
-            <RegisterModal visible={isRegisterVisible} onClose={() => setIsRegisterVisible(false)} onRegister={handleRegister} />
+            <RegisterModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                isEditMode={isEditMode}
+                onRegister={handleRegister}
+                onSaveEdit={handleSaveEdit}
+            />
             <LoginModal visible={isLoginVisible} onClose={() => setIsLoginVisible(false)} onLogin={handleLogin} />
 
         </ScrollView>

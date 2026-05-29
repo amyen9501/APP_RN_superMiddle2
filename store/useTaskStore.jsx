@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { db, auth } from '../firebaseConfig';
 import { collection, query, where, orderBy, onSnapshot, doc, updateDoc, addDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { getDocs } from 'firebase/firestore';
+import { updateProfile } from "firebase/auth";
 
 const useTaskStore = create((set, get) => ({
     tasks: [],
@@ -106,7 +107,7 @@ const useTaskStore = create((set, get) => ({
         const { tasks } = get();
         const isBeingUsed = tasks.some(t => t.category === categoryName);
         if (isBeingUsed) {
-            return { success: false, message: "該分類尚有任務，無法刪除！" };
+            return { success: false, message: "該分類尚有任務，無法刪除" };
         }
         set((state) => ({
             categories: state.categories.filter(c => c !== categoryName)
@@ -136,6 +137,20 @@ const useTaskStore = create((set, get) => ({
             console.error("移轉任務失敗:", error);
         }
     },
+    updateCurrentProfile: async (displayName, selectedAvatar) => {
+        const user = auth.currentUser;
+        if (!user) return { success: false, message: "找不到當前使用者" };
+
+        try {
+            await updateProfile(user, {
+                displayName: displayName,
+                photoURL: selectedAvatar
+            });
+            return { success: true };
+        } catch (error) {
+            return { success: false, message: error.message };
+        }
+    }
 }));
 
 export default useTaskStore;
