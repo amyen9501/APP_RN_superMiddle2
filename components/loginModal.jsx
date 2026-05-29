@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
 
 export default function LoginModal({ visible, onClose, onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   const handleSubmit = () => {
     if (!email || !password) {
@@ -12,7 +14,7 @@ export default function LoginModal({ visible, onClose, onLogin }) {
     }
 
     onLogin({ email, password });
-    
+
 
     setEmail('');
     setPassword('');
@@ -22,7 +24,7 @@ export default function LoginModal({ visible, onClose, onLogin }) {
     <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>歡迎回來</Text>
+          <Text style={styles.modalTitle}>登入帳號</Text>
 
           <TextInput
             style={styles.input}
@@ -32,13 +34,26 @@ export default function LoginModal({ visible, onClose, onLogin }) {
             keyboardType="email-address"
             autoCapitalize="none"
           />
-          <TextInput
-            style={styles.input}
-            placeholder="請輸入密碼"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="請輸入密碼"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={isPasswordHidden}
+              autoCapitalize="none"
+            />
+            <TouchableOpacity
+              style={styles.eyeButton}
+              onPress={() => setIsPasswordHidden(!isPasswordHidden)}
+            >
+              <Ionicons
+                name={isPasswordHidden ? "eye-off-outline" : "eye-outline"}
+                size={22}
+                color="#aaa"
+              />
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.modalActionRow}>
             <TouchableOpacity style={[styles.modalBtn, styles.cancelBtn]} onPress={onClose}>
@@ -56,57 +71,83 @@ export default function LoginModal({ visible, onClose, onLogin }) {
 }
 
 const styles = StyleSheet.create({
-  modalOverlay: { 
-    flex: 1, 
-    backgroundColor: 'rgba(0,0,0,0.5)', 
-    justifyContent: 'center', 
-    alignItems: 'center' 
-},
-  modalContainer: { 
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modalContainer: {
     width: '85%',
     backgroundColor: '#fff',
     borderRadius: 20,
-    padding: 20 
+    padding: 20
   },
-  modalTitle: { 
-    fontSize: 22, 
-    fontWeight: 'bold', 
-    marginBottom: 20, 
-    textAlign: 'center', 
-    color: '#443d40' 
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#443d40'
   },
-  input: { 
-    borderWidth: 1, 
-    borderColor: '#ffffff', 
-    borderRadius: 10, 
-    padding: 12, 
-    marginBottom: 15, 
+  input: {
+    borderWidth: 1,
+    borderColor: '#ffffff',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 15,
+    backgroundColor: '#fafafa',
+    fontSize: 15
+  },
+  modalActionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10
+  },
+  modalBtn: {
+    flex: 0.46,
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center'
+  },
+  cancelBtn: {
+    backgroundColor: '#eee'
+  },
+  cancelBtnText: {
+    color: '#555',
+    fontWeight: 'bold'
+  },
+  submitBtn: {
+    backgroundColor: '#a28fff'
+  },
+  submitBtnText: {
+    color: '#fff',
+    fontWeight: 'bold'
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ffffff',
+    borderRadius: 10,
+    marginBottom: 15,
     backgroundColor: '#fafafa', 
-    fontSize: 15 
+    width: '100%',
+    height: 48, 
   },
-  modalActionRow: { 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    marginTop: 10 
- },
-  modalBtn: { 
-    flex: 0.46, 
-    paddingVertical: 12, 
-    borderRadius: 10, 
-    alignItems: 'center' 
+  passwordInput: {
+    flex: 1,
+    height: '100%',
+    paddingHorizontal: 12, 
+    fontSize: 14,
+    color: '#333',
+    backgroundColor: 'transparent',
   },
-  cancelBtn: { 
-    backgroundColor: '#eee' 
+
+  eyeButton: {
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
   },
-  cancelBtnText: { 
-    color: '#555', 
-    fontWeight: 'bold' 
-  },
-  submitBtn: { 
-    backgroundColor: '#a28fff' 
-  },
-  submitBtnText: { 
-    color: '#fff', 
-    fontWeight: 'bold' 
-  }
 });

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Image } from 'react-native';
 import { auth } from '../firebaseConfig';
+import { Ionicons } from "@expo/vector-icons";
 
 const DEFAULT_AVATARS = [
   'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEirQIqMrqy-o_GnGz9vhmRG3q8xLFR3fdHN0gmV0ST5Y8k0twPi5BCHwZ9YdbtXORLR6PpJJSiT18wWT91Jd6bNnEyJ80wK1NqvXRBKMbIOrH99uTp6RmvjDx5y5yRmPIy32g_V00epUQw/s170/boy_01.png',
   'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi_ojo5kmjWa2Fyfjb4OwHqWrJuRRyTp-NQbfrAJHcxbSCqMKmdJ0wqcZAjswWdxU3gWCRjxUjBcV51JaxSw2PvlhLdR51P-un0o4g7ZXj2hANZJ5SI33TfQBBXiOHR3Qd5svw3F8eJtCY/s170/girl_13.png',
   'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj_Jb2dSHvFPcUjxl753C-AkJDQdD71J9cwskYmrwpw2lcR7CoLEZU77s6ZWcgLsTJ_Rjsn2onNx1TkwlYv2_ziUm49HGN4fsMDccNN2HJBq3Wp-agn5U9Fc45FzDVKDJR81H4HYYF-zhE/s170/animal_inu.png',
+  'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiwf_Xp6Betg2IhK6EqdWnfa4l6wV7rniHFbBE7rMTnqE28eaEmUP6ZgZZusF5TxH_R-8r9ENcekbLJGgNpy4XoZzeaV6nGNeQz5V0pKo105ReDxbyLnIxUyODtmqZvGaRZmWmESTGcDXM/s170/monster06.png'
 ];
 
 export default function RegisterModal({ visible, onClose, onRegister, isEditMode = false, onSaveEdit }) {
@@ -14,6 +16,7 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState(DEFAULT_AVATARS[0]);
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   const handleSubmit = () => {
     if (isEditMode) {
@@ -38,7 +41,7 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
     <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>建立帳號</Text>
+          <Text style={styles.modalTitle}>註冊帳號</Text>
           <Text style={styles.inputLabel}>選擇頭像：</Text>
           <View style={styles.avatarPickerContainer}>
             {DEFAULT_AVATARS.map((avatarUrl, index) => (
@@ -68,13 +71,26 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
-              <TextInput
-                style={styles.input}
-                placeholder="請輸入密碼"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={styles.passwordInput}
+                  placeholder="請輸入密碼"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={isPasswordHidden}
+                  autoCapitalize="none"
+                />
+                <TouchableOpacity
+                  style={styles.eyeButton}
+                  onPress={() => setIsPasswordHidden(!isPasswordHidden)}
+                >
+                  <Ionicons
+                    name={isPasswordHidden ? "eye-off-outline" : "eye-outline"}
+                    size={22}
+                    color="#aaa"
+                  />
+                </TouchableOpacity>
+              </View>
             </>
           )}
 
@@ -168,5 +184,31 @@ const styles = StyleSheet.create({
   submitBtnText: {
     color: '#fff',
     fontWeight: 'bold'
-  }
+  },
+passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ffffff',
+    borderRadius: 10,
+    marginBottom: 15,
+    backgroundColor: '#fafafa', 
+    width: '100%',
+    height: 48, 
+  },
+  passwordInput: {
+    flex: 1,
+    height: '100%',
+    paddingHorizontal: 12, 
+    fontSize: 14,
+    color: '#333',
+    backgroundColor: 'transparent',
+  },
+
+  eyeButton: {
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+  },
 });
