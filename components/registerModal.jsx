@@ -41,7 +41,7 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
     <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>註冊帳號</Text>
+          <Text style={styles.modalTitle}>{isEditMode ? "編輯帳號" : "註冊帳號"}</Text>
           <Text style={styles.inputLabel}>選擇頭像：</Text>
           <View style={styles.avatarPickerContainer}>
             {DEFAULT_AVATARS.map((avatarUrl, index) => (
