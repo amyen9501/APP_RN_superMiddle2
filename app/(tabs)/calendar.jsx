@@ -208,9 +208,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#fff',
-    padding: 15,
+    padding: 20,
+    width: '100%',
     borderRadius: 12,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: '#eee',
     marginBottom: 10,
   },
@@ -228,6 +229,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#a28fff',
     marginTop: 4,
+    left: 10,
   },
  
   qrItemButton: {
@@ -271,6 +273,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     textAlign: 'center',
   },
+  emptyBox: { alignItems: 'center', marginTop: 20 },
   modalSubtitle: {
     fontSize: 12,
     color: '#666',
