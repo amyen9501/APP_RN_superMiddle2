@@ -1,19 +1,69 @@
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useEffect, useState } from "react";
-import { Modal, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Modal, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import useTaskStore from "../store/useTaskStore";
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,   
+    shouldPlaySound: true,   
+    shouldSetBadge: false,
+  }),
+});
+
+const scheduleTaskNotification = async (taskTitle, taskDate) => {
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+  
+  if (existingStatus !== 'granted') {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+  
+  if (finalStatus !== 'granted') {
+    Alert.alert('提示', '請允許通知權限，以便接收任務提醒！');
+    return null;
+  }
+  
+  const triggerDate = new Date(`${taskDate}T09:00:00`);
+
+  if (triggerDate <= new Date()) {
+    return null;
+  }
+ 
+
+  const notificationId = await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "📌 任務截止提醒",
+      body: `別忘了！您的任務「${taskTitle}」今天到期喔！`,
+      sound: true,
+    },
+
+    trigger: {
+      type: 'calendar',                
+      year: triggerDate.getFullYear(),
+      month: triggerDate.getMonth() + 1,
+      day: triggerDate.getDate(),
+      hour: 9,                          
+      minute: 0,                       
+    },
+  });
+
+  return notificationId; 
+};
+
+
 
 export default function AddTaskModal({ editTaskData, setEditTaskData }) {
     const { isModalVisible, setModalVisible, addTask, categories, updateTask, deleteTask } = useTaskStore();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [category, setCategory] = useState('工作');
-    const [date, setDate] = useState(new Date());
     const [selectedCate, setSelectedCate] = useState(null);
+    const [date, setDate] = useState(new Date());
     const dropdownData = categories.map(cat => ({ label: cat, value: cat }));
-
 
     const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -24,7 +74,6 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
                 setContent(editTaskData.content || '');
                 setSelectedCate(editTaskData.category || null);
                 setDate(editTaskData.date ? new Date(editTaskData.date) : new Date());
-
             } else {
                 setTitle('');
                 setContent('');
@@ -41,31 +90,33 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
             setEditTaskData(null);
         }
     };
-    const onDateChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setShowDatePicker(Platform.OS === 'ios');
-        setDate(currentDate);
-    };
-    const formatDate = (date) => {
-        return date.toISOString().split('T')[0];
-    };
 
-
-
-    const saveButton = () => {
-        if (!title || !selectedCate) return alert('請填寫標題並選擇分類');
+    const saveButton = async () => {
+        if (!title || !selectedCate) return Alert.alert('提示', '請填寫標題並選擇分類');
+        
         const dateString = date.toISOString().split('T')[0];
+        
+        let notifId = null;
+        if (!editTaskData) {
+            notifId = await scheduleTaskNotification(title, dateString);
+        }
+
         const taskPayload = {
+            id: editTaskData ? editTaskData.id : Date.now().toString(), // 確保新增時有 ID
             title: title,
             content: content,
             category: selectedCate,
-            date: dateString
+            date: dateString,
+            status: editTaskData ? editTaskData.status : '進行中',
+            notificationId: notifId 
         };
+
         if (editTaskData) {
             updateTask(editTaskData.id, taskPayload);
         } else {
             addTask(taskPayload);
         }
+
         setModalVisible(false);
         setEditTaskData(null);
         setSelectedCate(null);
@@ -73,13 +124,11 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
         setContent('');
         setDate(new Date());
     }
+
     if (!isModalVisible) return null;
-
-
 
     return (
         <Modal visible={isModalVisible} animationType="slide" transparent={true}>
-
             <View style={styles.Card}>
                 <View style={styles.modal}>
                     <View style={styles.top}>
@@ -92,24 +141,29 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
                             style={styles.cancelButton}>
                             <Ionicons name="close" size={30} color="white" />
                         </TouchableOpacity>
-
                     </View>
-                    <Text style={styles.newTaskText2}>任務標題</Text>
-                    <TextInput style={styles.TaskInput} placeholder="輸入任務標題..." value={title} onChangeText={setTitle} autoFocus={true} />
-                    <Text style={styles.newTaskText2}>任務描述</Text>
-                    <TextInput style={styles.TaskInput} placeholder="輸入任務描述..." value={content} onChangeText={setContent} autoFocus={true} />
-                    <Text style={styles.newTaskText2}>截止日期</Text>
-                    <TouchableOpacity
-                        onPress={() => setShowDatePicker(true)}
-                        style={styles.datePickerBox}
-                    >
-                        <Ionicons name="calendar" size={20} color="#f3acc1" />
-                        <Text style={styles.dateDisplay}>
-                            {date.toISOString().split('T')[0]} { }
-                        </Text>
-                    </TouchableOpacity>
+                    
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                        <View style={{ width: '100%' }}>
+                            <Text style={styles.newTaskText2}>任務標題</Text>
+                            <TextInput style={styles.TaskInput} placeholder="輸入任務標題..." value={title} onChangeText={setTitle} autoFocus={true} />
+                            
+                            <Text style={styles.newTaskText2}>任務描述</Text>
+                            <TextInput style={styles.TaskInput} placeholder="輸入任務描述..." value={content} onChangeText={setContent} />
+                            
+                            <Text style={styles.newTaskText2}>截止日期</Text>
+                            <TouchableOpacity
+                                onPress={() => setShowDatePicker(true)}
+                                style={styles.datePickerBox}
+                            >
+                                <Ionicons name="calendar" size={20} color="#f3acc1" />
+                                <Text style={styles.dateDisplay}>
+                                    {date.toISOString().split('T')[0]}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </TouchableWithoutFeedback> 
 
-                    { }
                     {showDatePicker && (
                         <DateTimePicker
                             value={date}
@@ -121,6 +175,7 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
                             }}
                         />
                     )}
+                    
                     <Text style={styles.newTaskText2}>選擇分類</Text>
                     <Dropdown
                         style={styles.dropdown}
@@ -134,6 +189,7 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
                         value={selectedCate}
                         onChange={item => setSelectedCate(item.value)}
                     />
+                    
                     <View style={styles.buttonGroup}>
                         {editTaskData && (
                             <TouchableOpacity
@@ -150,12 +206,13 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
                             </Text>
                         </Pressable>
                     </View>
-
                 </View>
             </View>
         </Modal>
     )
 }
+
+// styles 保持您原有的設定即可...
 
 const styles = StyleSheet.create({
     Card: {

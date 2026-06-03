@@ -56,6 +56,12 @@ export default function Layout() {
                         <Ionicons name="settings-outline" size={30} color={focused ? "white" : "#f3acc1"} />
                     )
                 }} />
+                 <Tabs.Screen
+                 name="ScannerScreen"
+                 options={{
+                 href: null, 
+    }}
+  />
         </Tabs>
     );
 }
