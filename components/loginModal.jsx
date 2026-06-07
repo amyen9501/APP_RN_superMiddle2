@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../theme/ThemeContext.js";
 
 export default function LoginModal({ visible, onClose, onLogin }) {
+   const { theme, isDarkMode, toggleTheme } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
@@ -23,20 +25,27 @@ export default function LoginModal({ visible, onClose, onLogin }) {
   return (
     <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.modalOverlay}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>登入帳號</Text>
+        <View style={[styles.modalContainer,{backgroundColor: theme.bgl}]}>
+          <Text style={[styles.modalTitle,{color: theme.text}]}>登入帳號</Text>
 
           <TextInput
             style={styles.input}
+             backgroundColor={theme.bg}
+                color={theme.text}
+                placeholderTextColor={theme.second} 
             placeholder="請輸入註冊的 Email"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
           />
-          <View style={styles.passwordContainer}>
+          <View style={styles.passwordContainer}
+                        backgroundColor={theme.bgl}>
             <TextInput
               style={styles.passwordInput}
+               backgroundColor={theme.bg}
+                color={theme.text}
+                placeholderTextColor={theme.second} 
               placeholder="請輸入密碼"
               value={password}
               onChangeText={setPassword}
@@ -50,17 +59,17 @@ export default function LoginModal({ visible, onClose, onLogin }) {
               <Ionicons
                 name={isPasswordHidden ? "eye-off-outline" : "eye-outline"}
                 size={22}
-                color="#aaa"
+                color={theme.second}
               />
             </TouchableOpacity>
           </View>
 
           <View style={styles.modalActionRow}>
-            <TouchableOpacity style={[styles.modalBtn, styles.cancelBtn]} onPress={onClose}>
-              <Text style={styles.cancelBtnText}>取消</Text>
+            <TouchableOpacity style={[styles.modalBtn, styles.cancelBtn,{backgroundColor:theme.light}]} onPress={onClose}>
+              <Text style={[styles.cancelBtnText, { color: theme.text }]}>取消</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.modalBtn, styles.submitBtn]} onPress={handleSubmit}>
-              <Text style={styles.submitBtnText}>登入</Text>
+            <TouchableOpacity style={[styles.modalBtn, styles.submitBtn,{backgroundColor:theme.primary}]} onPress={handleSubmit}>
+              <Text style={[styles.submitBtnText, { color: theme.textl }]}>登入</Text>
             </TouchableOpacity>
           </View>
 
@@ -79,7 +88,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: '85%',
-    backgroundColor: '#fff',
+  
     borderRadius: 20,
     padding: 20
   },
@@ -92,7 +101,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ffffff',
+    borderColor: '#ffffff00',
     borderRadius: 10,
     padding: 12,
     marginBottom: 15,
@@ -128,7 +137,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ffffff',
+    borderColor: '#ffffff00',
     borderRadius: 10,
     marginBottom: 15,
     backgroundColor: '#fafafa', 
@@ -139,12 +148,13 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     paddingHorizontal: 12, 
+      borderRadius: 10,
     fontSize: 14,
     color: '#333',
     backgroundColor: 'transparent',
   },
 
-  eyeButton: {
+   eyeButton: {
     paddingHorizontal: 12,
     justifyContent: 'center',
     alignItems: 'center',

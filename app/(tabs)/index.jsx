@@ -8,13 +8,14 @@ import useTaskStore from "../../store/useTaskStore";
 import { useFocusEffect } from "expo-router";
 import { auth } from "../../firebaseConfig";
 import ScannerScreen from './ScannerScreen';
+import { useTheme } from "../../theme/ThemeContext.js";
 
 export default function Index() {
  
   const { tasks, filterStatus, setFilterStatus, toggleTaskStatus, setModalVisible, listenToTasks } = useTaskStore();
   const [editTaskData, setEditTaskData] = useState(null);
   const [showScanner, setShowScanner] = useState(false);
-
+const { theme, isDarkMode, toggleTheme } = useTheme();
  
   const filterTask = tasks.filter(task => {
     const currentStatus = task.status || '進行中';
@@ -49,12 +50,12 @@ export default function Index() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container}>
+      <View style={[{flex: 1, backgroundColor: theme.bg} ,styles.container]}>
         
      
         <View style={styles.missionBox}>
           <LinearGradient
-            colors={['#FFD1DC', '#D1C4E9', '#a28fff']}
+            colors={theme.gradient}
             style={styles.missionBox}
             start={{ x: 0, y: 0.5 }}
             end={{ x: 1, y: 0.5 }}
@@ -92,7 +93,7 @@ export default function Index() {
           {['全部', '進行中', '已完成'].map((status) => (
             <TouchableOpacity
               key={status}
-              style={[styles.tabButton, filterStatus === status && styles.activeTab]}
+              style={[styles.tabButton,{backgroundColor: theme.primary}, filterStatus === status && {backgroundColor: theme.second}]}
               onPress={() => setFilterStatus(status)}
             >
               <Text style={[styles.tabText, filterStatus === status && styles.activeTabText]}>{status}</Text>
@@ -107,7 +108,7 @@ export default function Index() {
           keyboardShouldPersistTaps="handled"
         >
           {filterTask.map((item) => (
-            <View key={item.id} style={styles.taskCard}>
+            <View key={item.id} style={[styles.taskCard,{backgroundColor:theme.bgl}]}>
               <TouchableOpacity
                 onPress={() => toggleTaskStatus(item.id)}
                 style={styles.taskcheck}
@@ -115,27 +116,27 @@ export default function Index() {
                 <Ionicons
                   name={item.status === '已完成' ? "checkmark-circle" : "ellipse-outline"}
                   size={28}
-                  color={item.status === '已完成' ? "#a28fffdc" : "#f3acc1"}
+                  color={item.status === '已完成' ? theme.second : theme.primary}
                 />
               </TouchableOpacity>
               
-              <View style={styles.taskText}>
-                <Text style={[styles.taskTitle, item.status === '已完成' && styles.finishTask]}>{item.title}</Text>
-                {item.content ? <Text style={styles.taskContent}>{item.content}</Text> : null}
+              <View style={[styles.taskText]}>
+                <Text style={[styles.taskTitle,{color:theme.text}, item.status === '已完成' && styles.finishTask]}>{item.title}</Text>
+                {item.content ? <Text style={[styles.taskContent,{color:theme.text}]}>{item.content}</Text> : null}
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={styles.taskDetailTag}>#{item.category}</Text>
-                  <Text style={styles.taskDetailDate}> 截止日期：{item.date} </Text>
+                  <Text style={[styles.taskDetailTag,{backgroundColor:theme.primary, color:theme.text}]}>#{item.category}</Text>
+                  <Text style={[styles.taskDetailDate,{backgroundColor:theme.second, color:theme.textl}]}> 截止日期：{item.date} </Text>
                 </View>
               </View>
 
               <TouchableOpacity
-                style={styles.editbutton}
+                style={[styles.editbutton]}
                 onPress={() => {
                   setEditTaskData(item);
                   setModalVisible(true);
                 }}
               >
-                <Ionicons name="create-outline" size={24} color="#f3acc1" style={{ marginRight: 10 }} />
+                <Ionicons name="create-outline" size={24} color="theme.primary" style={[{ marginRight: 10 },{color:theme.primary}]} />
               </TouchableOpacity>
             </View>
           ))}
@@ -160,7 +161,7 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ffffff",
+  
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: StatusBar.currentHeight || 30,
@@ -224,10 +225,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 10,
     marginBottom: 10,
-    backgroundColor: '#ffd1dc',
+  
   },
   activeTab: {
-    backgroundColor: '#a28fffdc',
+   
   },
   tabText: {
     color: '#fff',
@@ -237,8 +238,13 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   taskCard: {
+     shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 10,
+        elevation: 4,
     backgroundColor: "#fff",
-    borderColor: '#ababab',
+    borderColor: '#ababab00',
     borderWidth: 1.5,
     borderRadius: 10,
     paddingVertical: 15,
@@ -258,7 +264,7 @@ const styles = StyleSheet.create({
   },
   finishTask: {
     textDecorationLine: 'line-through',
-    color: '#bbb',
+    color: '#a0a0a0',
   },
   taskContent: {
     marginVertical: 5,
@@ -277,7 +283,6 @@ const styles = StyleSheet.create({
   taskDetailDate: {
     marginLeft: 5,
     color: '#2c2a39',
-    backgroundColor: '#d6cffc',
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderRadius: 20,

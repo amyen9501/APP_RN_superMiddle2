@@ -7,13 +7,14 @@ import { onAuthStateChanged, signOut, linkWithCredential, EmailAuthProvider, upd
 import RegisterModal from '../../components/registerModal';
 import LoginModal from "../../components/loginModal";
 import useTaskStore from "../../store/useTaskStore";
+import { useTheme } from "../../theme/ThemeContext.js";
 
 const DEFAULT_AVATARS = ['https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjwG0xXIptaOP2F8qwAxGh3weCF0xugPbOgOFCwEIenI0j6FBGDjdxqYN4VgUDkgVWc8n3ef_jZ-1m6BAuhEync9TJoejgyIeHycpXiB1oZJ88u99yC0C3cnap7MUNNZ5WQQwqfV9gaTHA/s170/animal_buta.png'];
 
 
 export default function Setting() {
     const { listenToTasks, migrateGuestTasks, updateCurrentProfile } = useTaskStore();
-    const [isDarkMode, setIsDarkMode] = useState(false);
+   const { theme, isDarkMode, toggleTheme } = useTheme();
     const [user, setUser] = useState(null);
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -96,12 +97,12 @@ export default function Setting() {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.cardContainer}>
-                <LinearGradient colors={['#FFD1DC', '#D1C4E9', '#a28fff']} style={styles.Card} start={{ x: 0, y: 0.5 }} end={{ x: 1, y: 0.5 }}>
-                    <View style={styles.Cardtext}>
-                        <Text style={styles.title}>設定</Text>
-                        <Text style={styles.tt}>個人化你的應用程式</Text>
+        <ScrollView style={{ flex: 1, backgroundColor: theme.bg }} contentContainerStyle={[styles.container]}>
+            <View  style={[styles.cardContainer]}>
+                <LinearGradient colors={theme.gradient} style={styles.Card} start={{ x: 0, y: 0.5 }} end={{ x: 1, y: 0.5 }}>
+                    <View  style={styles.Cardtext}>
+                        <Text style={[styles.title , { color:theme.textl }]}>設定</Text>
+                        <Text style={[styles.tt,{ color: theme.textl}]}>個人化你的應用程式</Text>
                     </View>
                 </LinearGradient>
             </View>
@@ -109,42 +110,42 @@ export default function Setting() {
 
             {user && user.isAnonymous ? (
                 /*訪客模式*/
-                <View style={styles.personalCard}>
-                    <View style={styles.profileHeader}>
+                <View style={[styles.personalCard,{backgroundColor: theme.bgl}]}>
+                   <View style={[styles.profileHeader]}>
                         <Image source={{ uri: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgKdSrmtSstxIzLHTBocc0-gUtYruNXO9S5bRMpWeHR6VVKgDfMK956erZQ5p93vew6n9IrFPC7HNdVNa3djeqItGhwqPbJbyBCnRMSjhFP_IfV1umTcxjTborMMCS-effWgOaUJcdwAoI/s400/futon_derenai.png' }} style={styles.avatar} />
                         <View style={styles.userInfo}>
-                            <Text style={styles.nameText}>訪客模式</Text>
+                            <Text style={[styles.nameText,{color: theme.text}]}>訪客模式</Text>
                             <Text style={styles.subText}>登入或註冊以同步雲端任務</Text>
                         </View>
                     </View>
                     <View style={styles.btnGroup}>
-                        <TouchableOpacity style={[styles.actionBtn, styles.loginBtn]} onPress={() => setIsLoginVisible(true)}>
-                            <Text style={styles.loginBtnText}>已有帳號登入</Text>
+                        <TouchableOpacity style={[styles.actionBtn, styles.loginBtn,{ backgroundColor: theme.bg }]} onPress={() => setIsLoginVisible(true)}>
+                            <Text style={[styles.loginBtnText,{color: theme.text}]}>已有帳號登入</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={[styles.actionBtn, styles.registerBtn]} onPress={openRegisterModal}>
-                            <Text style={styles.registerBtnText}>新用戶註冊</Text>
+                        <TouchableOpacity  style={[styles.actionBtn,styles.registerBtn,{ backgroundColor: theme.primary }]} onPress={openRegisterModal}>
+                            <Text style={[styles.registerBtnText,{color: theme.textl}]}>新用戶註冊</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             ) : user ? (
                 /*會員*/
-                <View style={styles.personalCard}>
+                <View style={[styles.personalCard, { backgroundColor: theme.bgl }]}>
                     <View style={styles.profileHeader}>
                         <Image source={{ uri: user.photoURL || DEFAULT_AVATARS[0] }} style={styles.avatar} />
                         <View style={styles.userInfo}>
-                            <Text style={styles.nameText}>{user.displayName || "無名氏"}</Text>
-                            <Text style={styles.subText}>{user.email}</Text>
+                            <Text style={[styles.nameText, { color:theme.text}]}>{user.displayName || "無名氏"}</Text>
+                            <Text style={[styles.subText, { color:theme.text}]}>{user.email}</Text>
                         </View>
                         <TouchableOpacity
                             style={styles.editBtn}
                             onPress={openEditModal}>
-                            <Ionicons name="create-outline" size={24} color="#f3acc1" style={{ marginRight: 10 }} />
+                            <Ionicons name="create-outline" size={24} color='theme.primary' style={[{ marginRight: 10 }, { color:theme.primary}]} />
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.divider} />
-                    <TouchableOpacity style={styles.logoutBtn} onPress={handleSignOut}>
-                        <Text style={styles.logoutBtnText}>登出帳號</Text>
+                    <View style={[styles.divider, { backgroundColor: theme.primary }]} />
+                    <TouchableOpacity style={[styles.logoutBtn, { backgroundColor: theme.bg ,borderColor:"#00000000"}]} onPress={handleSignOut}>
+                        <Text style={[styles.logoutBtnText, { color: theme.text }]}>登出帳號</Text>
                     </TouchableOpacity>
                 </View>
             ) : (
@@ -152,13 +153,27 @@ export default function Setting() {
             )}
 
 
-            <View style={styles.tcard}>
-                <View style={styles.tinfo}>
-                    <Ionicons name={isDarkMode ? "moon" : "sunny"} size={40} color={isDarkMode ? "#a28fff" : "#f3acc1"} />
-                    <Text style={styles.t2}>深色模式</Text>
-                </View>
-                <Switch trackColor={{ false: "#767577", true: "#a28fff" }} thumbColor={isDarkMode ? "#f3acc1" : "#f4f3f4"} onValueChange={setIsDarkMode} value={isDarkMode} style={{ alignSelf: "center" }} />
-            </View>
+            <View style={[styles.tcard,{backgroundColor: theme.bgl}]}>
+  <View style={styles.tinfo}>
+    <Ionicons
+      name={isDarkMode ? "moon" : "sunny"}
+      size={40}
+      color={theme.primary}
+    />
+
+    <Text style={[styles.t2, { color: theme.text }]}>
+      深色模式
+    </Text>
+  </View>
+
+  <Switch
+    trackColor={{true: theme.second ,false: theme.second }}
+    thumbColor={theme.primary}
+    onValueChange={toggleTheme}
+    value={isDarkMode}
+    style={{ alignSelf: "center" }}
+  />
+</View>
 
             <View style={styles.footer}><Text style={{ fontSize: 16, color: "#bbb", fontWeight: "600" }}>敬請期待更多功能！</Text></View>
 
@@ -178,7 +193,7 @@ export default function Setting() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#ffffff",
+      
         flexGrow: 1,
         alignItems: "center",
         justifyContent: "flex-start",
@@ -241,7 +256,7 @@ const styles = StyleSheet.create({
     nameText: {
         fontSize: 18,
         fontWeight: "bold",
-        color: "#443d40",
+
     },
     subText: {
         fontSize: 13,
@@ -250,7 +265,7 @@ const styles = StyleSheet.create({
     },
     loginBtn: {
         marginTop: 15,
-        backgroundColor: "#FFD1DC",
+    
         paddingVertical: 10,
         borderRadius: 10,
         alignItems: "center"
@@ -267,13 +282,13 @@ const styles = StyleSheet.create({
     },
     logoutBtn: {
         borderWidth: 1,
-        borderColor: '#FFD1DC',
+        
         paddingVertical: 10,
         borderRadius: 10,
         alignItems: "center"
     },
     logoutBtnText: {
-        color: '#f3acc1',
+    
         fontSize: 15,
         fontWeight: "bold"
     },
@@ -324,7 +339,7 @@ const styles = StyleSheet.create({
     loginBtn: {
         backgroundColor: "#f5f5f5",
         borderWidth: 1,
-        borderColor: '#eee'
+        borderColor: '#eeeeee00'
     },
     loginBtnText: {
         color: "#777",
@@ -332,7 +347,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
     },
     registerBtn: {
-        backgroundColor: "#FFD1DC"
+        
     },
     registerBtnText: {
         color: "#81777a",

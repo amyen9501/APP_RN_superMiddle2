@@ -3,6 +3,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useEffect } from 'react';
 import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import { auth } from '../firebaseConfig'; 
+import { Slot } from "expo-router";
+import { ThemeProvider } from "../theme/ThemeContext";
 
 export default function RootLayout() {
   
@@ -25,10 +27,12 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack>
-        <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-      </Stack>
-    </GestureHandlerRootView>
+    <ThemeProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </GestureHandlerRootView>
+    </ThemeProvider>
   );
 }

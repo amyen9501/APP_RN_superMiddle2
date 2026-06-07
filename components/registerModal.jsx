@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Image } from 'react-native';
 import { auth } from '../firebaseConfig';
 import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../theme/ThemeContext.js";
 
 const DEFAULT_AVATARS = [
   'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEirQIqMrqy-o_GnGz9vhmRG3q8xLFR3fdHN0gmV0ST5Y8k0twPi5BCHwZ9YdbtXORLR6PpJJSiT18wWT91Jd6bNnEyJ80wK1NqvXRBKMbIOrH99uTp6RmvjDx5y5yRmPIy32g_V00epUQw/s170/boy_01.png',
@@ -11,7 +12,7 @@ const DEFAULT_AVATARS = [
 ];
 
 export default function RegisterModal({ visible, onClose, onRegister, isEditMode = false, onSaveEdit }) {
-
+  const { theme, isDarkMode, toggleTheme } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -40,15 +41,15 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
   return (
     <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.modalOverlay}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>{isEditMode ? "編輯帳號" : "註冊帳號"}</Text>
-          <Text style={styles.inputLabel}>選擇頭像：</Text>
+        <View style={[styles.modalContainer,{backgroundColor: theme.bgl}]}>
+          <Text style={[styles.modalTitle,{color: theme.text}]}>{isEditMode ? "編輯帳號" : "註冊帳號"}</Text>
+          <Text style={[styles.inputLabel]}>選擇頭像：</Text>
           <View style={styles.avatarPickerContainer}>
             {DEFAULT_AVATARS.map((avatarUrl, index) => (
               <TouchableOpacity
                 key={index}
                 onPress={() => setSelectedAvatar(avatarUrl)}
-                style={[styles.avatarOptionWrapper, selectedAvatar === avatarUrl && styles.selectedAvatarWrapper]}
+                style={[styles.avatarOptionWrapper, selectedAvatar === avatarUrl && {borderColor: theme.second}]}
               >
                 <Image source={{ uri: avatarUrl }} style={styles.avatarOption} />
               </TouchableOpacity>
@@ -57,6 +58,9 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
 
           <TextInput
             style={styles.input}
+            backgroundColor={theme.bg}
+                color={theme.text}
+                placeholderTextColor={theme.second} 
             placeholder="請輸入暱稱（顯示名稱）"
             value={displayName}
             onChangeText={setDisplayName}
@@ -65,15 +69,22 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
             <>
               <TextInput
                 style={styles.input}
+                backgroundColor={theme.bg}
+                color={theme.text}
+                placeholderTextColor={theme.second} 
                 placeholder="請輸入 Email"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
-              <View style={styles.passwordContainer}>
+              <View style={styles.passwordContainer}
+              backgroundColor={theme.bgl}>
                 <TextInput
                   style={styles.passwordInput}
+                  backgroundColor={theme.bg}
+                color={theme.text}
+                placeholderTextColor={theme.second} 
                   placeholder="請輸入密碼"
                   value={password}
                   onChangeText={setPassword}
@@ -82,12 +93,13 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
                 />
                 <TouchableOpacity
                   style={styles.eyeButton}
+                  
                   onPress={() => setIsPasswordHidden(!isPasswordHidden)}
                 >
                   <Ionicons
                     name={isPasswordHidden ? "eye-off-outline" : "eye-outline"}
                     size={22}
-                    color="#aaa"
+                    color={theme.second}
                   />
                 </TouchableOpacity>
               </View>
@@ -95,11 +107,11 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
           )}
 
           <View style={styles.modalActionRow}>
-            <TouchableOpacity style={[styles.modalBtn, styles.cancelBtn]} onPress={onClose}>
-              <Text style={styles.cancelBtnText}>取消</Text>
+            <TouchableOpacity style={[styles.modalBtn, styles.cancelBtn,{backgroundColor:theme.light}]} onPress={onClose}>
+              <Text style={[styles.cancelBtnText, { color: theme.text }]}>取消</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.modalBtn, styles.submitBtn]} onPress={handleSubmit}>
-              <Text style={styles.submitBtnText}>{isEditMode ? "儲存修改" : "確認註冊"}</Text>
+            <TouchableOpacity style={[styles.modalBtn, styles.submitBtn,{backgroundColor:theme.primary}]} onPress={handleSubmit}>
+              <Text style={[styles.submitBtnText, { color: theme.textl }]}>{isEditMode ? "儲存修改" : "確認註冊"}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -130,7 +142,7 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 14,
-    color: '#555',
+    color: "#999",
     marginBottom: 8
   },
   avatarPickerContainer: {
@@ -145,7 +157,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent'
   },
   selectedAvatarWrapper: {
-    borderColor: '#a28fff'
+  
   },
   avatarOption: {
     width: 46,
@@ -154,7 +166,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ffffff',
+    borderColor: '#ffffff00',
     borderRadius: 10,
     padding: 12,
     marginBottom: 15,
@@ -182,14 +194,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#f3acc1'
   },
   submitBtnText: {
-    color: '#fff',
+  
     fontWeight: 'bold'
   },
 passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ffffff',
+    borderColor: '#ffffff00',
     borderRadius: 10,
     marginBottom: 15,
     backgroundColor: '#fafafa', 
@@ -198,10 +210,11 @@ passwordContainer: {
   },
   passwordInput: {
     flex: 1,
+    borderRadius: 10,
     height: '100%',
     paddingHorizontal: 12, 
     fontSize: 14,
-    color: '#333',
+    color: '#555',
     backgroundColor: 'transparent',
   },
 

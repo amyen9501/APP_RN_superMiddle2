@@ -1,8 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import useTaskStore from '../store/useTaskStore';
+import { useTheme } from "../theme/ThemeContext.js";
 
 export default function Button({ setEditTaskData }) {
+  const { theme, isDarkMode, toggleTheme } = useTheme();
   const setModalVisible = useTaskStore((state) => state.setModalVisible);
   return (
     <>
@@ -11,7 +13,7 @@ export default function Button({ setEditTaskData }) {
           setEditTaskData(null);
           setModalVisible(true);
         }}
-        style={styles.button}>
+        style={[styles.button,{backgroundColor: theme.primary}]}>
         <Ionicons name="add" size={30} color="white" />
       </TouchableOpacity>
     </>
@@ -28,7 +30,6 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f3acc1",
     padding: 10,
     borderRadius: 999
   },
