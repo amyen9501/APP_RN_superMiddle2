@@ -5,11 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import useTaskStore from '../../store/useTaskStore'; 
 import { auth, db } from '../../firebaseConfig';  
 import { collection, doc, setDoc } from 'firebase/firestore';
+import { useTheme } from "../../theme/ThemeContext.js";
 
 
 export default function ScannerScreen({ onClose }) {
   
-
+const { theme, isDarkMode, toggleTheme } = useTheme();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const { addTask } = useTaskStore(); 
@@ -21,10 +22,10 @@ export default function ScannerScreen({ onClose }) {
 
   if (!permission.granted) {
     return (
-      <View style={styles.centerContainer}>
-        <Text style={styles.permissionText}>APP 需要相機權限才能掃描任務 QR Code 喔！</Text>
-        <TouchableOpacity style={styles.permissionButton} onPress={requestPermission}>
-          <Text style={styles.permissionButtonText}>授權相機權限</Text>
+      <View style={[styles.centerContainer,{backgroundColor:theme.bgl}]}>
+        <Text style={[styles.permissionText,{color:theme.text}]}>APP 需要相機權限才能掃描任務 QR Code 喔！</Text>
+        <TouchableOpacity style={[styles.permissionButton,{backgroundColor:theme.primary}]} onPress={requestPermission}>
+          <Text style={[styles.permissionButtonText,{color:theme.textl}]}>授權相機權限</Text>
         </TouchableOpacity>
       </View>
     );
@@ -99,7 +100,7 @@ export default function ScannerScreen({ onClose }) {
       
     
       <View style={styles.overlayContainer}>
-        <View style={styles.scanTargetBox} />
+        <View style={[styles.scanTargetBox,{borderColor:theme.primary}]} />
         <Text style={styles.scanHintText}>將對焦框準對他人的任務 QR Code</Text>
       </View>
 
@@ -114,8 +115,8 @@ export default function ScannerScreen({ onClose }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'black' },
   centerContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: '#fff' },
-  permissionText: { marginBottom: 20, textAlign: 'center', fontSize: 16, color: '#666' },
-  permissionButton: { backgroundColor: '#f3acc1', paddingVertical: 12, paddingHorizontal: 30, borderRadius: 25 },
+  permissionText: { marginBottom: 20, textAlign: 'center', fontSize: 16,  },
+  permissionButton: { paddingVertical: 12, paddingHorizontal: 30, borderRadius: 25 },
   permissionButtonText: { color: 'white', fontWeight: 'bold', fontSize: 16 },
   overlayContainer: {
     ...StyleSheet.absoluteFillObject,

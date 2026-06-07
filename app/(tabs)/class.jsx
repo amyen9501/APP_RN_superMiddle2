@@ -3,8 +3,10 @@ import { useState } from "react";
 import { FlatList, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
 import useTaskStore from "../../store/useTaskStore";
 import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../theme/ThemeContext.js";
 
 export default function Class() {
+    const { theme, isDarkMode, toggleTheme } = useTheme();
     const { categories, addCategory, tasks, deleteCategory } = useTaskStore();
     const [newCate, setNewCate] = useState('');
     const [isAdding, setIsAdding] = useState(false);
@@ -22,16 +24,16 @@ export default function Class() {
     const allCount = categories.length;
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container,{ backgroundColor: theme.bg}]}>
             <View style={styles.missionBox}>
                 <LinearGradient
-                    colors={['#FFD1DC', '#D1C4E9', '#a28fff']}
+                    colors={theme.gradient}
                     style={styles.missionBox}
                     start={{ x: 0, y: 0.5 }}
                     end={{ x: 1, y: 0.5 }}
                 >
-                    <Text style={styles.missionText}>分類管理</Text>
-                    <Text style={styles.missionclasscount}>共{allCount}個分類</Text>
+                    <Text style={[styles.missionText,{ color: theme.textl }]}>分類管理</Text>
+                    <Text style={[styles.missionclasscount,{ color: theme.textl }]}>共{allCount}個分類</Text>
                 </LinearGradient>
             </View>
 
@@ -39,32 +41,32 @@ export default function Class() {
                 {!isAdding ?
                     (
                         <View>
-                            <TouchableOpacity style={styles.button} onPress={() => setIsAdding(true)}>
-                                <Text style={styles.addclass}>新增分類</Text>
+                            <TouchableOpacity style={[styles.button,{backgroundColor: theme.bgl}]} onPress={() => setIsAdding(true)}>
+                                <Text style={[styles.addclass,{color: theme.text}]}>新增分類</Text>
                             </TouchableOpacity>
                         </View>
                     ) : (
-                        <View style={styles.addclasswin}>
+                        <View style={[styles.addclasswin,{ backgroundColor: theme.bgl}]}>
                             <TextInput
-                                style={styles.addclass}
+                                style={[styles.addclass,{color: theme.second}]}
                                 placeholder="請輸入分類名稱..."
-                                 placeholderTextColor="#e9bdc7" 
+                                 placeholderTextColor={theme.primary} 
                                 value={newCate}
                                 onChangeText={setNewCate}
 
                             />
                             <View style={styles.twobutton}>
                                 <LinearGradient
-                                    colors={['#FFD1DC', '#D1C4E9', '#a28fff']}
+                                    colors={theme.gradient}
                                     style={styles.submitbutton}
                                     start={{ x: 0, y: 0 }}
                                     end={{ x: 1, y: 1 }} ><TouchableOpacity onPress={saveAdd}>
 
-                                        <Text style={styles.submit}>送出</Text>
+                                        <Text style={[styles.submit,{color: theme.textl}]}>送出</Text>
                                     </TouchableOpacity></LinearGradient>
 
-                                <TouchableOpacity style={styles.cancelbutton} onPress={() => setIsAdding(false)}>
-                                    <Text style={styles.cancel}>取消</Text>
+                                <TouchableOpacity style={[styles.cancelbutton,{ backgroundColor: theme.bg}]} onPress={() => setIsAdding(false)}>
+                                    <Text style={[styles.cancel,{color: theme.second}]}>取消</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -101,18 +103,18 @@ export default function Class() {
                         );
                     };
                     return (
-                        <View style={styles.classcard}>
+                        <View style={[styles.classcard,{ backgroundColor: theme.bgl }]}>
                             <View style={styles.classcardLeft}>
-                                <View style={styles.block}>
-                                    <Ionicons name='folder-outline' size={20} color={'white'} />
+                                <View style={[styles.block,{ backgroundColor: theme.primary }]}>
+                                    <Ionicons name='folder-outline' size={20} color={theme.text} />
                                 </View>
                                 <View>
-                                    <Text style={styles.classview}>{item}</Text>
-                                    <View style={styles.statusContainer}>
-                                        <Text style={styles.classtext}>
-                                            <Text>總任務 {totalCount} </Text>
-                                            <Text style={styles.classtag1}> 進行中 {ongoingCount} </Text>
-                                            <Text style={{ color: '#a28fffdc' }}> 已完成 {completedCount}</Text>
+                                    <Text style={[styles.classview,{ color: theme.text }]}>{item}</Text>
+                                    <View style={[styles.statusContainer]}>
+                                        <Text style={[styles.classtext]}>
+                                            <Text style={{ color: theme.primary }}>總任務 {totalCount} </Text>
+                                            <Text style={[styles.classtag1,{ color: theme.primary }]}> 進行中 {ongoingCount} </Text>
+                                            <Text style={{ color: theme.second }}> 已完成 {completedCount}</Text>
                                         </Text>
                                     </View>
                                 </View>
@@ -208,7 +210,6 @@ const styles = StyleSheet.create({
     addclass: {
         fontSize: 16,
         fontWeight: "bold",
-        color: "#9393DD",
         textAlign: "center",
         marginTop: 20,
         marginBottom: 15,
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
         height: 80,
-        borderColor: '#ababab',
+        borderColor: '#ababab00',
         borderWidth: 1.5,
         borderRadius: 10,
     },
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
 
         fontSize: 12,
         fontWeight: "bold",
-        color: "#f3acc1",
+        
 
 
         overflow: 'hidden',

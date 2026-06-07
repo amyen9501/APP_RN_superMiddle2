@@ -5,6 +5,7 @@ import useTaskStore from '../../store/useTaskStore';
 import QRCode from 'react-native-qrcode-svg'; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../theme/ThemeContext.js";
 
 LocaleConfig.locales['zh'] = {
   monthNames: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
@@ -15,6 +16,7 @@ LocaleConfig.locales['zh'] = {
 LocaleConfig.defaultLocale = 'zh';
 
 export default function CalendarScreen() {
+  const { theme, isDarkMode, toggleTheme } = useTheme();
   const { tasks } = useTaskStore();
   const today = new Date().toISOString().split('T')[0]; 
   const [selected, setSelected] = useState(today);
@@ -53,48 +55,55 @@ export default function CalendarScreen() {
   }, [activeShareTask]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:theme.bg}]}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         
-        <View style={styles.card}>
-          <Calendar
+        <View style={[styles.card,{backgroundColor:theme.bgl}]}>
+          <Calendar style={{backgroundColor: theme.bgl}}
             onDayPress={day => setSelected(day.dateString)}
             markedDates={{
               ...Object.keys(taskData).reduce((acc, date) => {
-                acc[date] = { marked: true, dotColor: '#f3acc1' };
+                acc[date] = { marked: true, dotColor: theme.second};
                 return acc;
               }, {}),
               [selected]: { 
                 selected: true, 
-                selectedColor: '#f3acc1', 
-                selectedTextColor: 'white' 
+                selectedColor: theme.primary, 
+                selectedTextColor: theme.text
               }
             }}
             theme={{
-              todayTextColor: '#f3acc1',
-              arrowColor: '#f3acc1',
-              textMonthFontWeight: 'bold',
+              todayTextColor: theme.second,
+              arrowColor: theme.primary,
+               calendarBackground: theme.bgl,
+  dayTextColor: theme.text,
+  monthTextColor: theme.text,
+  textSectionTitleColor: theme.text,
+  arrowColor: theme.primary,
+  selectedDayBackgroundColor: theme.primary,
+  selectedDayTextColor: theme.text,
+  textDisabledColor: "#a0a0a0",
             }}
           />
         </View>
 
-        <View style={styles.taskCard}>
+        <View style={[styles.taskCard,{backgroundColor:theme.bgl}]}>
           <View style={styles.titleContainer}>
-            <Text style={styles.listTitle}>{selected} 的任務</Text>
+            <Text style={[styles.listTitle,{color:theme.primary}]}>{selected} 的任務</Text>
           
           </View>
 
          {taskData[selected] ? (
             taskData[selected].map((task) => (
-              <View key={task.id} style={styles.taskItem}>
-                <View style={styles.taskInfo}>
+              <View key={task.id} style={[styles.taskItem,{backgroundColor:theme.bg}]}>
+                <View style={[styles.taskInfo]}>
                   <Text style={[
-                    styles.taskTitleText, 
+                    styles.taskTitleText,{color:theme.text},
                     task.status === '已完成' && styles.completedText
                   ]}>
                     • {task.title}
                   </Text>
-                  <Text style={styles.categoryTag}>#{task.category}</Text>
+                  <Text style={[styles.categoryTag,{color:theme.second}]}>#{task.category}</Text>
                 </View>
 
           
@@ -105,12 +114,12 @@ export default function CalendarScreen() {
                     setModalVisible(true);   
                   }}
                 >
-                  <Ionicons name="qr-code-outline" size={24} color="#f3acc1" />
+                  <Ionicons name="qr-code-outline" size={24} color={theme.second} />
                 </TouchableOpacity>
 
                 <Text style={[
                    styles.statusTag, 
-                   { backgroundColor: task.status === '已完成' ? '#d1c4e9' : '#ffd1dc' }
+                   { backgroundColor: task.status === '已完成' ? theme.second:theme.primary }
                 ]}>
                   {task.status}
                 </Text>
@@ -172,10 +181,10 @@ export default function CalendarScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#ffffff' },
+  container: { flex: 1},
   scrollContent: { padding: 20},
   card: {
-    backgroundColor: 'white',
+   
     borderRadius: 15,
     padding: 10,
     elevation: 4,
@@ -201,7 +210,7 @@ const styles = StyleSheet.create({
   listTitle: { 
     fontSize: 18, 
     fontWeight: 'bold', 
-    color: '#f3acc1',
+    
   },
   taskItem: {
     flexDirection: 'row',
@@ -212,22 +221,21 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: '#eee',
+    borderColor: '#eeeeee00',
     marginBottom: 10,
   },
   taskInfo: { flex: 1 },
   taskTitleText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+  
   },
   completedText: {
     textDecorationLine: 'line-through',
-    color: '#bbb',
+    color: '#a0a0a0',
   },
   categoryTag: {
     fontSize: 12,
-    color: '#a28fff',
     marginTop: 4,
     left: 10,
   },
@@ -256,7 +264,6 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '80%',
-    backgroundColor: 'white',
     borderRadius: 20,
     padding: 25,
     alignItems: 'center',

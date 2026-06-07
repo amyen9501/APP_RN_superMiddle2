@@ -5,6 +5,7 @@ import { Modal, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpaci
 import { Dropdown } from 'react-native-element-dropdown';
 import useTaskStore from "../store/useTaskStore";
 import * as Notifications from 'expo-notifications';
+import { useTheme } from "../theme/ThemeContext.js";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -58,6 +59,8 @@ const scheduleTaskNotification = async (taskTitle, taskDate) => {
 
 
 export default function AddTaskModal({ editTaskData, setEditTaskData }) {
+    const { theme, isDarkMode, toggleTheme } = useTheme();
+     
     const { isModalVisible, setModalVisible, addTask, categories, updateTask, deleteTask } = useTaskStore();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -130,34 +133,34 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
     return (
         <Modal visible={isModalVisible} animationType="slide" transparent={true}>
             <View style={styles.Card}>
-                <View style={styles.modal}>
+                <View style={[styles.modal,{backgroundColor:theme.bgl}]}>
                     <View style={styles.top}>
-                        <Text style={styles.newTaskText}>新增任務</Text>
+                        <Text style={[styles.newTaskText,{color:theme.text}]}>新增任務</Text>
                         <TouchableOpacity
                             onPress={() => {
                                 setModalVisible(false);
                                 setEditTaskData(null);
                             }}
-                            style={styles.cancelButton}>
+                            style={[styles.cancelButton,{backgroundColor:theme.primary}]}>
                             <Ionicons name="close" size={30} color="white" />
                         </TouchableOpacity>
                     </View>
                     
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                         <View style={{ width: '100%' }}>
-                            <Text style={styles.newTaskText2}>任務標題</Text>
-                            <TextInput style={styles.TaskInput} placeholder="輸入任務標題..." value={title} onChangeText={setTitle} autoFocus={true} />
+                            <Text style={[styles.newTaskText2,{color:theme.text}]}>任務標題</Text>
+                            <TextInput placeholderTextColor={theme.second} color={theme.text} style={styles.TaskInput} placeholder="輸入任務標題..." value={title} onChangeText={setTitle} autoFocus={true} />
                             
-                            <Text style={styles.newTaskText2}>任務描述</Text>
-                            <TextInput style={styles.TaskInput} placeholder="輸入任務描述..." value={content} onChangeText={setContent} />
+                            <Text style={[styles.newTaskText2,{color:theme.text}]}>任務描述</Text>
+                            <TextInput placeholderTextColor={theme.second} color={theme.text} style={styles.TaskInput} placeholder="輸入任務描述..." value={content} onChangeText={setContent} />
                             
-                            <Text style={styles.newTaskText2}>截止日期</Text>
+                            <Text style={[styles.newTaskText2,{color:theme.text}]}>截止日期</Text>
                             <TouchableOpacity
                                 onPress={() => setShowDatePicker(true)}
-                                style={styles.datePickerBox}
+                                style={[styles.datePickerBox,{backgroundColor:theme.bg}]}
                             >
-                                <Ionicons name="calendar" size={20} color="#f3acc1" />
-                                <Text style={styles.dateDisplay}>
+                                <Ionicons name="calendar" size={20} color={theme.primary} />
+                                <Text style={[styles.dateDisplay,{color:theme.text}]}>
                                     {date.toISOString().split('T')[0]}
                                 </Text>
                             </TouchableOpacity>
@@ -176,7 +179,7 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
                         />
                     )}
                     
-                    <Text style={styles.newTaskText2}>選擇分類</Text>
+                    <Text style={[styles.newTaskText2,{color:theme.text}]}>選擇分類</Text>
                     <Dropdown
                         style={styles.dropdown}
                         placeholderStyle={styles.placeholderStyle}
@@ -185,6 +188,8 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
                         maxHeight={300}
                         labelField='label'
                         valueField="value"
+                        placeholderStyle={{ color: theme.second }}
+                        selectedTextStyle={{ color: theme.text }}
                         placeholder="請選擇分類..."
                         value={selectedCate}
                         onChange={item => setSelectedCate(item.value)}
@@ -200,8 +205,8 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
                             </TouchableOpacity>
                         )}
 
-                        <Pressable onPress={saveButton} style={styles.addbutton}>
-                            <Text style={styles.addbuttonText}>
+                        <Pressable onPress={saveButton} style={[styles.addbutton,{backgroundColor:theme.primary}]}>
+                            <Text style={[styles.addbuttonText,{color:theme.textl}]}>
                                 {editTaskData ? "儲存修改" : "新增任務"}
                             </Text>
                         </Pressable>
@@ -217,7 +222,7 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
 const styles = StyleSheet.create({
     Card: {
         flex: 1,
-        backgroundColor: '#6666667b',
+         backgroundColor: 'rgba(0,0,0,0.5)',
         justifyContent: "center",
         alignItems: "center",
     },
@@ -249,7 +254,6 @@ const styles = StyleSheet.create({
     },
     addbutton: {
         marginTop: 10,
-        backgroundColor: '#f3acc1',
         justifyContent: 'center',
         alignItems: 'center',
         paddingVertical: 15,
@@ -276,7 +280,6 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#f3acc1",
         padding: 10,
         borderRadius: 999,
         marginRight: 20,
@@ -311,12 +314,12 @@ const styles = StyleSheet.create({
     datePickerBox: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#f9f9f9',
+
         marginHorizontal: 20,
         padding: 12,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#eee',
+        borderColor: '#eeeeee00',
     },
     dateDisplay: {
         marginLeft: 10,
