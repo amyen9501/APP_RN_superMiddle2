@@ -28,7 +28,7 @@ export default function Layout() {
                     height: 120,
                     paddingTop: 10,
                     backgroundColor: theme.bgl,
-
+                    borderTopWidth: isDarkMode ? 0 : 1,
                 },
 
                 tabBarLabelStyle: {
