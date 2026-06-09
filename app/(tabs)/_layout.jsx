@@ -7,55 +7,59 @@ export default function Layout() {
     const { theme, isDarkMode, toggleTheme } = useTheme();
     return (
         <Tabs
-  key={theme.primary}
-  screenOptions={{
-    headerStyle: {
-  backgroundColor: theme.bgl,
-},
-    headerTitleAlign: "center",
+            key={theme.primary}
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: theme.bgl,
+                    borderBottomWidth: 1,
+                    borderBottomColor: isDarkMode ? '#00000000' : '#2929292b',
 
-    headerTitleStyle: {
-        
-      color: theme.primary,
-      fontSize: 24,
-      
-    },
+                },
+                headerTitleAlign: "center",
 
-    tabBarStyle: {
-      height: 120,
-      paddingTop: 10,
-      backgroundColor: theme.bgl, 
-    },
+                headerTitleStyle: {
 
-    tabBarLabelStyle: {
-      marginTop: 6,
-      fontSize: 12,
-    },
+                    color: theme.primary,
+                    fontSize: 24,
 
-    tabBarActiveTintColor: theme.text,
-    tabBarInactiveTintColor: theme.second,
+                },
 
-    tabBarActiveBackgroundColor: theme.primary,
+                tabBarStyle: {
+                    height: 120,
+                    paddingTop: 10,
+                    backgroundColor: theme.bgl,
 
-    tabBarItemStyle: {
-      borderRadius: 10,
-      marginHorizontal: 5,
-      marginVertical: 0,
-      overflow: "hidden",
-    },
+                },
 
-    tabBarAndroidRipple: {
-      borderless: false,
-      color: theme.primary,
-    },
-  }}
->
+                tabBarLabelStyle: {
+                    marginTop: 6,
+                    fontSize: 12,
+                },
+
+                tabBarActiveTintColor: theme.tab1,
+                tabBarInactiveTintColor: theme.tab2,
+
+                tabBarActiveBackgroundColor: theme.primary,
+
+                tabBarItemStyle: {
+                    borderRadius: 10,
+                    marginHorizontal: 5,
+                    marginVertical: 0,
+                    overflow: "hidden",
+                },
+
+                tabBarAndroidRipple: {
+                    borderless: false,
+                    color: theme.primary,
+                },
+            }}
+        >
             <Tabs.Screen
                 name="index"
                 options={{
                     title: "首頁",
                     tabBarIcon: ({ focused }) => (
-                        <Ionicons name="home-outline" size={30} color={focused ? theme.text : theme.second} />
+                        <Ionicons name="home-outline" size={30} color={focused ? theme.tab1 : theme.tab2} />
                     )
                 }} />
             <Tabs.Screen
@@ -63,7 +67,7 @@ export default function Layout() {
                 options={{
                     title: "日曆",
                     tabBarIcon: ({ focused }) => (
-                        <Ionicons name="calendar-outline" size={30} color={focused ? theme.text : theme.second} />
+                        <Ionicons name="calendar-outline" size={30} color={focused ? theme.tab1 : theme.tab2} />
                     )
                 }} />
             <Tabs.Screen
@@ -71,7 +75,7 @@ export default function Layout() {
                 options={{
                     title: "分類",
                     tabBarIcon: ({ focused }) => (
-                        <Ionicons name="folder-outline" size={30} color={focused ? theme.text : theme.second} />
+                        <Ionicons name="folder-outline" size={30} color={focused ? theme.tab1 : theme.tab2} />
                     )
                 }}
             />
@@ -80,16 +84,16 @@ export default function Layout() {
                 options={{
                     title: "設定",
                     tabBarIcon: ({ focused }) => (
-                        <Ionicons name="settings-outline" size={30} color={focused ? theme.text : theme.second} />
+                        <Ionicons name="settings-outline" size={30} color={focused ? theme.tab1 : theme.tab2} />
                     )
                 }} />
-                 <Tabs.Screen
-                 
-                 name="ScannerScreen"
-                 options={{
-                 href: null, 
-    }}
-  />
+            <Tabs.Screen
+
+                name="ScannerScreen"
+                options={{
+                    href: null,
+                }}
+            />
         </Tabs>
     );
 }

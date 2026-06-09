@@ -105,7 +105,7 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
         }
 
         const taskPayload = {
-            id: editTaskData ? editTaskData.id : Date.now().toString(), // 確保新增時有 ID
+            id: editTaskData ? editTaskData.id : Date.now().toString(),
             title: title,
             content: content,
             category: selectedCate,
@@ -149,10 +149,10 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                         <View style={{ width: '100%' }}>
                             <Text style={[styles.newTaskText2,{color:theme.text}]}>任務標題</Text>
-                            <TextInput placeholderTextColor={theme.second} color={theme.text} style={styles.TaskInput} placeholder="輸入任務標題..." value={title} onChangeText={setTitle} autoFocus={true} />
+                            <TextInput placeholderTextColor={theme.pla} color={theme.text} style={styles.TaskInput} placeholder="輸入任務標題..." value={title} onChangeText={setTitle} autoFocus={true} />
                             
                             <Text style={[styles.newTaskText2,{color:theme.text}]}>任務描述</Text>
-                            <TextInput placeholderTextColor={theme.second} color={theme.text} style={styles.TaskInput} placeholder="輸入任務描述..." value={content} onChangeText={setContent} />
+                            <TextInput placeholderTextColor={theme.pla} color={theme.text} style={styles.TaskInput} placeholder="輸入任務描述..." value={content} onChangeText={setContent} />
                             
                             <Text style={[styles.newTaskText2,{color:theme.text}]}>截止日期</Text>
                             <TouchableOpacity
@@ -182,14 +182,14 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
                     <Text style={[styles.newTaskText2,{color:theme.text}]}>選擇分類</Text>
                     <Dropdown
                         style={styles.dropdown}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
+                        placeholderStyle={[styles.placeholderStyle,{color: theme.pla}]}
+                        selectedTextStyle={[styles.selectedTextStyle,{color: theme.text}]}
                         data={dropdownData}
                         maxHeight={300}
                         labelField='label'
                         valueField="value"
-                        placeholderStyle={{ color: theme.second }}
-                        selectedTextStyle={{ color: theme.text }}
+                        //placeholderStyle={{ color: theme.second }}
+                        //selectedTextStyle={{ color: theme.text }}
                         placeholder="請選擇分類..."
                         value={selectedCate}
                         onChange={item => setSelectedCate(item.value)}
@@ -217,7 +217,6 @@ export default function AddTaskModal({ editTaskData, setEditTaskData }) {
     )
 }
 
-// styles 保持您原有的設定即可...
 
 const styles = StyleSheet.create({
     Card: {
@@ -263,7 +262,7 @@ const styles = StyleSheet.create({
     },
     addbuttonText: {
         color: '#fff',
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: 'bold',
     },
     deleteButton: {

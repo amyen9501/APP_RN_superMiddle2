@@ -58,9 +58,9 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
 
           <TextInput
             style={styles.input}
-            backgroundColor={theme.bg}
+            backgroundColor={isDarkMode ? theme.bg : theme.ldark}
                 color={theme.text}
-                placeholderTextColor={theme.second} 
+                placeholderTextColor={theme.pla} 
             placeholder="請輸入暱稱（顯示名稱）"
             value={displayName}
             onChangeText={setDisplayName}
@@ -69,9 +69,9 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
             <>
               <TextInput
                 style={styles.input}
-                backgroundColor={theme.bg}
+                backgroundColor={isDarkMode ? theme.bg : theme.ldark}
                 color={theme.text}
-                placeholderTextColor={theme.second} 
+                placeholderTextColor={theme.pla} 
                 placeholder="請輸入 Email"
                 value={email}
                 onChangeText={setEmail}
@@ -82,9 +82,9 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
               backgroundColor={theme.bgl}>
                 <TextInput
                   style={styles.passwordInput}
-                  backgroundColor={theme.bg}
+                  backgroundColor={isDarkMode ? theme.bg : theme.ldark}
                 color={theme.text}
-                placeholderTextColor={theme.second} 
+                placeholderTextColor={theme.pla} 
                   placeholder="請輸入密碼"
                   value={password}
                   onChangeText={setPassword}
@@ -99,7 +99,7 @@ export default function RegisterModal({ visible, onClose, onRegister, isEditMode
                   <Ionicons
                     name={isPasswordHidden ? "eye-off-outline" : "eye-outline"}
                     size={22}
-                    color={theme.second}
+                    color={theme.pla}
                   />
                 </TouchableOpacity>
               </View>

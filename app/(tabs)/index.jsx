@@ -109,7 +109,15 @@ export default function Index() {
           keyboardShouldPersistTaps="handled"
         >
           {filterTask.map((item) => (
-            <View key={item.id} style={[styles.taskCard, { backgroundColor: theme.bgl }]}>
+            <View key={item.id} style={[styles.taskCard, {
+              backgroundColor: theme.bgl,
+              borderWidth: isDarkMode ? 0 : 1.5,
+              borderColor: isDarkMode ? '#00000000' : '#2929294a',
+              shadowOffset: isDarkMode ? { width: 0, height: 4 }: 0,
+              shadowOpacity: isDarkMode ? 0.15: 0,
+              shadowRadius: isDarkMode ? 10 : 0,
+              elevation: isDarkMode ?  4 : 0 ,
+            }]}>
               <AnimatedCheckButton
                 isCompleted={item.status === '已完成'}
                 onPress={() => toggleTaskStatus(item.id)}
@@ -233,19 +241,18 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   taskCard: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    elevation: 4,
+    //shadowOffset: { width: 0, height: 4 },
+    //shadowOpacity: 0.15,
+    //shadowRadius: 10,
+    //elevation: 4,
     backgroundColor: "#fff",
     borderColor: '#ababab00',
     borderWidth: 1.5,
-    borderRadius: 10,
+    borderRadius: 12,
     paddingVertical: 15,
     paddingRight: 15,
     paddingLeft: 10,
-    marginVertical: 10,
+    marginVertical: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -288,6 +295,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   editbutton: {
-    justifyContent: 'center'
+    marginRight:5,
+    //justifyContent: 'center'
   }
 });

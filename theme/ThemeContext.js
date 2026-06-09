@@ -25,7 +25,7 @@ const theme = isDarkMode ? darkTheme : lightTheme;
   return (
   <ThemeContext.Provider
     value={{
-      theme,        // ⭐ 一定要有這個
+      theme, 
       isDarkMode,
       toggleTheme,
     }}

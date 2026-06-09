@@ -50,7 +50,7 @@ export default function Class() {
                             <TextInput
                                 style={[styles.addclass,{color: theme.second}]}
                                 placeholder="請輸入分類名稱..."
-                                 placeholderTextColor={theme.primary} 
+                                 placeholderTextColor={isDarkMode ? theme.primary : theme.text}
                                 value={newCate}
                                 onChangeText={setNewCate}
 
@@ -103,7 +103,7 @@ export default function Class() {
                         );
                     };
                     return (
-                        <View style={[styles.classcard,{ backgroundColor: theme.bgl }]}>
+                        <View style={[styles.classcard,{ backgroundColor: theme.bgl ,borderWidth: isDarkMode ? 0 : 1.5, borderColor: isDarkMode ? '#00000000' : '#2929294a'}]}>
                             <View style={styles.classcardLeft}>
                                 <View style={[styles.block,{ backgroundColor: theme.primary }]}>
                                     <Ionicons name='folder-outline' size={20} color={theme.text} />
@@ -249,15 +249,12 @@ const styles = StyleSheet.create({
     },
     classcard: {
         backgroundColor: "#fff",
-        borderColor: '#ababab00',
-        borderWidth: 1.5,
         marginVertical: 5,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '100%',
         height: 80,
-        borderColor: '#ababab00',
         borderWidth: 1.5,
         borderRadius: 10,
     },

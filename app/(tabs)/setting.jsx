@@ -119,7 +119,7 @@ export default function Setting() {
                         </View>
                     </View>
                     <View style={styles.btnGroup}>
-                        <TouchableOpacity style={[styles.actionBtn, styles.loginBtn,{ backgroundColor: theme.bg }]} onPress={() => setIsLoginVisible(true)}>
+                        <TouchableOpacity style={[styles.actionBtn, styles.loginBtn,{ backgroundColor: isDarkMode ? theme.bg : theme.ldark }]} onPress={() => setIsLoginVisible(true)}>
                             <Text style={[styles.loginBtnText,{color: theme.text}]}>已有帳號登入</Text>
                         </TouchableOpacity>
 
@@ -144,7 +144,7 @@ export default function Setting() {
                         </TouchableOpacity>
                     </View>
                     <View style={[styles.divider, { backgroundColor: theme.primary }]} />
-                    <TouchableOpacity style={[styles.logoutBtn, { backgroundColor: theme.bg ,borderColor:"#00000000"}]} onPress={handleSignOut}>
+                    <TouchableOpacity style={[styles.logoutBtn, { backgroundColor: isDarkMode ? theme.bg : theme.ldark ,borderColor:"#00000000"}]} onPress={handleSignOut}>
                         <Text style={[styles.logoutBtnText, { color: theme.text }]}>登出帳號</Text>
                     </TouchableOpacity>
                 </View>
@@ -162,7 +162,7 @@ export default function Setting() {
     />
 
     <Text style={[styles.t2, { color: theme.text }]}>
-      深色模式
+      {isDarkMode ? "深色模式" : "亮色模式"}
     </Text>
   </View>
 

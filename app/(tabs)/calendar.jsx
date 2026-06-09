@@ -58,7 +58,7 @@ export default function CalendarScreen() {
     <View style={[styles.container,{backgroundColor:theme.bg}]}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         
-        <View style={[styles.card,{backgroundColor:theme.bgl}]}>
+        <View style={[styles.card,{backgroundColor:theme.bgl,borderWidth: isDarkMode ? 0 : 1, borderColor: isDarkMode ? '#00000000' : '#2929292b'}]}>
           <Calendar style={{backgroundColor: theme.bgl}}
             onDayPress={day => setSelected(day.dateString)}
             markedDates={{
@@ -87,7 +87,7 @@ export default function CalendarScreen() {
           />
         </View>
 
-        <View style={[styles.taskCard,{backgroundColor:theme.bgl}]}>
+        <View style={[styles.taskCard,{backgroundColor:theme.bgl,borderWidth: isDarkMode ? 0 : 1, borderColor: isDarkMode ? '#00000000' : '#2929292b'}]}>
           <View style={styles.titleContainer}>
             <Text style={[styles.listTitle,{color:theme.primary}]}>{selected} 的任務</Text>
           
@@ -95,7 +95,7 @@ export default function CalendarScreen() {
 
          {taskData[selected] ? (
             taskData[selected].map((task) => (
-              <View key={task.id} style={[styles.taskItem,{backgroundColor:theme.bg}]}>
+              <View key={task.id} style={[styles.taskItem,{backgroundColor:theme.bg,borderWidth: isDarkMode ? 0 : 1,borderColor: isDarkMode ? '#00000000' : '#2929292b'}]}>
                 <View style={[styles.taskInfo]}>
                   <Text style={[
                     styles.taskTitleText,{color:theme.text},
@@ -144,11 +144,11 @@ export default function CalendarScreen() {
         }}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
+          <View style={[styles.modalContent,{backgroundColor:theme.bgl}]}>
             {activeShareTask && (
               <>
-                <Text style={styles.modalTitle}>分享任務：{activeShareTask.title}</Text>
-                <Text style={styles.modalSubtitle}>請使用我們 APP 內建的相機掃描，即可一鍵複製此行程</Text>
+                <Text style={[styles.modalTitle,{color:theme.text}]}>分享任務：{activeShareTask.title}</Text>
+                <Text style={[styles.modalSubtitle,{color:theme.text}]}>請使用我們 APP 內建的相機掃描，即可一鍵複製此行程</Text>
                 
                 {generateTaskJsonString ? (
                   <View style={styles.qrContainer}>
@@ -164,13 +164,13 @@ export default function CalendarScreen() {
             )}
 
             <TouchableOpacity 
-              style={styles.closeButton} 
+              style={[styles.closeButton,{ backgroundColor: theme.bg}]} 
               onPress={() => {
                 setModalVisible(false);
                 setActiveShareTask(null);
               }}
             >
-              <Text style={styles.closeButtonText}>關閉</Text>
+              <Text style={[styles.closeButtonText,{color:theme.text}]}>關閉</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -210,7 +210,8 @@ const styles = StyleSheet.create({
   listTitle: { 
     fontSize: 18, 
     fontWeight: 'bold', 
-    
+    marginLeft:10,
+    marginTop:10
   },
   taskItem: {
     flexDirection: 'row',
@@ -280,7 +281,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     textAlign: 'center',
   },
-  emptyBox: { alignItems: 'center', marginTop: 20 },
+  emptyBox: { 
+    alignItems: 'center', 
+    marginTop:5,
+    marginBottom:15
+  },
   modalSubtitle: {
     fontSize: 12,
     color: '#666',
