@@ -9,23 +9,24 @@ import { useFocusEffect } from "expo-router";
 import { auth } from "../../firebaseConfig";
 import ScannerScreen from './ScannerScreen';
 import { useTheme } from "../../theme/ThemeContext.js";
+import AnimatedCheckButton from "../../components/AnimationButton.jsx";
 
 export default function Index() {
- 
+
   const { tasks, filterStatus, setFilterStatus, toggleTaskStatus, setModalVisible, listenToTasks } = useTaskStore();
   const [editTaskData, setEditTaskData] = useState(null);
   const [showScanner, setShowScanner] = useState(false);
-const { theme, isDarkMode, toggleTheme } = useTheme();
- 
+  const { theme, isDarkMode, toggleTheme } = useTheme();
+
   const filterTask = tasks.filter(task => {
     const currentStatus = task.status || '進行中';
     if (filterStatus === '全部') return true;
     return currentStatus === filterStatus;
   });
 
-  
+
   useEffect(() => {
-    let unsubscribeFromFirestore = () => {};
+    let unsubscribeFromFirestore = () => { };
     const unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
       if (unsubscribeFromFirestore) unsubscribeFromFirestore();
 
@@ -46,13 +47,13 @@ const { theme, isDarkMode, toggleTheme } = useTheme();
   const activeCount = tasks.filter(task => (task.status || '進行中') === '進行中').length;
   const finishCount = tasks.filter(task => task.status === '已完成').length;
 
- 
+
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={[{flex: 1, backgroundColor: theme.bg} ,styles.container]}>
-        
-     
+      <View style={[{ flex: 1, backgroundColor: theme.bg }, styles.container]}>
+
+
         <View style={styles.missionBox}>
           <LinearGradient
             colors={theme.gradient}
@@ -60,11 +61,11 @@ const { theme, isDarkMode, toggleTheme } = useTheme();
             start={{ x: 0, y: 0.5 }}
             end={{ x: 1, y: 0.5 }}
           >
-   
+
             <View style={styles.headerRow}>
               <Text style={styles.missionText}>我的任務</Text>
-              <TouchableOpacity 
-                style={styles.cameraButton} 
+              <TouchableOpacity
+                style={styles.cameraButton}
                 onPress={() => setShowScanner(true)}
               >
                 <Ionicons name="camera-outline" size={26} color="white" />
@@ -93,7 +94,7 @@ const { theme, isDarkMode, toggleTheme } = useTheme();
           {['全部', '進行中', '已完成'].map((status) => (
             <TouchableOpacity
               key={status}
-              style={[styles.tabButton,{backgroundColor: theme.primary}, filterStatus === status && {backgroundColor: theme.second}]}
+              style={[styles.tabButton, { backgroundColor: theme.primary }, filterStatus === status && { backgroundColor: theme.second }]}
               onPress={() => setFilterStatus(status)}
             >
               <Text style={[styles.tabText, filterStatus === status && styles.activeTabText]}>{status}</Text>
@@ -101,31 +102,24 @@ const { theme, isDarkMode, toggleTheme } = useTheme();
           ))}
         </View>
 
-        <ScrollView 
-          style={{ flex: 1 }} 
-          contentContainerStyle={styles.listContainer} 
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={styles.listContainer}
           showsHorizontalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
           {filterTask.map((item) => (
-            <View key={item.id} style={[styles.taskCard,{backgroundColor:theme.bgl}]}>
-              <TouchableOpacity
+            <View key={item.id} style={[styles.taskCard, { backgroundColor: theme.bgl }]}>
+              <AnimatedCheckButton
+                isCompleted={item.status === '已完成'}
                 onPress={() => toggleTaskStatus(item.id)}
-                style={styles.taskcheck}
-              >
-                <Ionicons
-                  name={item.status === '已完成' ? "checkmark-circle" : "ellipse-outline"}
-                  size={28}
-                  color={item.status === '已完成' ? theme.second : theme.primary}
-                />
-              </TouchableOpacity>
-              
+              />
               <View style={[styles.taskText]}>
-                <Text style={[styles.taskTitle,{color:theme.text}, item.status === '已完成' && styles.finishTask]}>{item.title}</Text>
-                {item.content ? <Text style={[styles.taskContent,{color:theme.text}]}>{item.content}</Text> : null}
+                <Text style={[styles.taskTitle, { color: theme.text }, item.status === '已完成' && styles.finishTask]}>{item.title}</Text>
+                {item.content ? <Text style={[styles.taskContent, { color: theme.text }]}>{item.content}</Text> : null}
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={[styles.taskDetailTag,{backgroundColor:theme.primary, color:theme.text}]}>#{item.category}</Text>
-                  <Text style={[styles.taskDetailDate,{backgroundColor:theme.second, color:theme.textl}]}> 截止日期：{item.date} </Text>
+                  <Text style={[styles.taskDetailTag, { backgroundColor: theme.primary, color: theme.text }]}>#{item.category}</Text>
+                  <Text style={[styles.taskDetailDate, { backgroundColor: theme.second, color: theme.textl }]}> 截止日期：{item.date} </Text>
                 </View>
               </View>
 
@@ -136,7 +130,7 @@ const { theme, isDarkMode, toggleTheme } = useTheme();
                   setModalVisible(true);
                 }}
               >
-                <Ionicons name="create-outline" size={24} color="theme.primary" style={[{ marginRight: 10 },{color:theme.primary}]} />
+                <Ionicons name="create-outline" size={24} color="theme.primary" style={[{ marginRight: 10 }, { color: theme.primary }]} />
               </TouchableOpacity>
             </View>
           ))}
@@ -145,7 +139,8 @@ const { theme, isDarkMode, toggleTheme } = useTheme();
         <AddTaskModal editTaskData={editTaskData} setEditTaskData={setEditTaskData} />
         <Button setEditTaskData={setEditTaskData} />
 
-      
+
+
         <Modal
           visible={showScanner}
           animationType="slide"
@@ -161,7 +156,7 @@ const { theme, isDarkMode, toggleTheme } = useTheme();
 
 const styles = StyleSheet.create({
   container: {
-  
+
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: StatusBar.currentHeight || 30,
@@ -225,10 +220,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 10,
     marginBottom: 10,
-  
+
   },
   activeTab: {
-   
+
   },
   tabText: {
     color: '#fff',
@@ -238,11 +233,11 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   taskCard: {
-     shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.08,
-        shadowRadius: 10,
-        elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 4,
     backgroundColor: "#fff",
     borderColor: '#ababab00',
     borderWidth: 1.5,
